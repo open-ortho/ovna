@@ -6,15 +6,20 @@
 Orthanc PACS Configuration for the Orthodontic Practice v0.1.1
 ==============================================================
 
+.. warning::
+
+   Documentation is still under development. Text here was developed for
+   developed for an older version, and needs to be completely re-written.
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contenuti:
+   :caption: Contents:
 
    installation
    configuration
 
-Indici e tabelle
-----------------
+Indeces and Tables
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
