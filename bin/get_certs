@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# File to go grab certificates from whereever certbot updated them to the proper
+# location.
+#
+
+SOURCESRV="orthanc@192.168.0.88"
+BASE="/docker/volumes/proxy/letsencrypt/live/npm-1/"
+SOURCE="${SOURCESRV}:${BASE}"
+DEST="$<ORTHANC_CONFIG>/orthanc-reverse-proxy/"
+
+scp "${SOURCE}cert.pem" "${DEST}" || exit
+scp "${SOURCE}privkey.pem" "${DEST}" || exit
+docker restart orthanc-reverse-proxy
