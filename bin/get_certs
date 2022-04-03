@@ -4,7 +4,7 @@
 # location.
 #
 
-SOURCESRV="orthanc@192.168.0.88"
+SOURCESRV="$<CERTIFICATE_SERVER>"
 BASE="/docker/volumes/proxy/letsencrypt/live/npm-1/"
 SOURCE="${SOURCESRV}:${BASE}"
 DEST="$<ORTHANC_CONFIG>/orthanc-reverse-proxy/"

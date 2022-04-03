@@ -1,0 +1,49 @@
+#
+# open-ortho orthanc v0.1.1
+#
+version: "2"
+services:
+  orthanc-reverse-proxy:
+    build: orthanc-reverse-proxy
+    container_name: orthanc-reverse-proxy
+    environment: 
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/Rome"
+    volumes: [
+      "$<ORTHANC-CONFIG>/orthanc-reverse-proxy/site-confs:/config/nginx/site-confs:ro",
+      "$<ORTHANC-CONFIG>/orthanc-reverse-proxy/keys:/config/keys:ro"
+    ]
+    restart: unless-stopped
+    ports: [
+      "$<ORTHANC-IP>:80:80",
+      "$<ORTHANC-IP>:443:443",
+    ]
+  orthanc:
+    build: orthanc
+    depends_on: [orthanc-index]
+    restart: unless-stopped
+    ports: [
+      "$<ORTHANC-IP>:104:4242"
+      ]
+    volumes: [
+      "$<ORTHANC-DATA-MOUNT>/storage:/var/lib/orthanc/db:Z",
+      "$<ORTHANC-CONFIG>/orthanc.production.json:/etc/orthanc/orthanc.json:ro"
+      ]
+    environment: 
+      VERBOSE_ENABLED: "false"
+      VERBOSE_STARTUP: "false"
+      OSIMIS_WEB_VIEWER1_PLUGIN_ENABLED: "true"
+      STONE_WEB_VIEWER_PLUGIN_ENABLED: "true"
+      DICOM_WEB_PLUGIN_ENABLED: "true"
+      ORTHANC__STONE_WEB_VIEWER__DATE_FORMAT: "YYYY-MM-DD"
+
+
+  orthanc-index:
+    image: postgres
+    restart: unless-stopped
+    volumes: [
+      "$<POSTGRESQL_DATA>:/var/lib/postgresql/data:Z"
+      ]
+    environment:
+      POSTGRES_PASSWORD: "postgres"

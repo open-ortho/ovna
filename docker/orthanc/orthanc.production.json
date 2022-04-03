@@ -1,0 +1,46 @@
+{
+  "_version": "0.1.1",
+  "Name": "ORTHO TANK",
+  "DicomAet": "ORTHO TANK",
+  "DicomModalities": {
+    "CLIENT1": [
+      "CLIENT1",
+      "192.168.10.10",
+      50101
+    ]
+  },
+  "StorageCompression": false,
+  "LimitFindResults": 100,
+  "LimitFindInstances": 1000,
+  "KeepAlive": true,
+  "TcpNoDelay": true,
+  "StorageAccessOnFind": "Never",
+  "TranscodeDicomProtocol": true,
+  "DicomAlwaysAllowEcho": true,
+  "DicomAlwaysAllowStore": true,
+  "RemoteAccessAllowed": true,
+  "AuthenticationEnabled": true,
+  "RegisteredUsers": {
+    "user1": "3V2VC4iBMG3UVHz6",
+    "user2": "k3yqCPJhuP9Gkw4B"
+  },
+  "PostgreSQL": {
+    "EnableIndex": true,
+    "IndexConnectionsCount": 10,
+    "EnableStorage": false,
+    "Host": "orthanc-index",
+    "Database": "postgres",
+    "Username": "postgres",
+    "Password": "postgres"
+  },
+  "DicomWeb": {
+    "Enable": true,
+    "Root": "/dicom-web/",
+    "EnableWado": true,
+    "WadoRoot": "/wado",
+    "Ssl": false,
+    "QidoCaseSensitive": true,
+    "StudiesMetadata": "Full",
+    "SeriesMetadata": "Full"
+  }
+}
