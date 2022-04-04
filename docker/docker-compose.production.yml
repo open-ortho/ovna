@@ -11,24 +11,24 @@ services:
       PGID: "1000"
       TZ: "Europe/Rome"
     volumes: [
-      "$<ORTHANC-CONFIG>/nginx-reverse-proxy/site-confs:/config/nginx/site-confs:ro",
-      "$<ORTHANC-CONFIG>/nginx-reverse-proxy/keys:/config/keys:ro"
+      "$<ORTHANC_CONFIG>/nginx-reverse-proxy/site-confs:/config/nginx/site-confs:ro",
+      "$<ORTHANC_CONFIG>/nginx-reverse-proxy/keys:/config/keys:ro"
     ]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC-IP>:80:80",
-      "$<ORTHANC-IP>:443:443",
+      "$<ORTHANC_IP>:80:80",
+      "$<ORTHANC_IP>:443:443",
     ]
   orthanc:
     build: orthanc
     depends_on: [orthanc-index]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC-IP>:104:4242"
+      "$<ORTHANC_IP>:104:4242"
       ]
     volumes: [
-      "$<ORTHANC-DATA-MOUNT>/storage:/var/lib/orthanc/db:Z",
-      "$<ORTHANC-CONFIG>/orthanc.production.json:/etc/orthanc/orthanc.json:ro"
+      "$<ORTHANC_DATA_MOUNT>/storage:/var/lib/orthanc/db:Z",
+      "$<ORTHANC_CONFIG>/orthanc.production.json:/etc/orthanc/orthanc.json:ro"
       ]
     environment: 
       VERBOSE_ENABLED: "false"

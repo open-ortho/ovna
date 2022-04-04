@@ -38,7 +38,7 @@ init (){
 }
 
 build (){
-    cp -Rv docker/postgresql "${DIST}"
+    cp -Rv docker "${DIST}"
     cp -Rv bin "${DIST}"
     cp -Rv etc "${DIST}"
     substitution
@@ -46,13 +46,13 @@ build (){
 
 substitution (){
     # Substitute all $<> variables
-    find ${DIST} -type f -exec sed -i "s#\$<ORTHANC-DATA-MOUNT>#${ORTHANC_DATA_MOUNT}#g" {} \;
+    find ${DIST} -type f -exec sed -i "s#\$<ORTHANC_DATA_MOUNT>#${ORTHANC_DATA_MOUNT}#g" {} \;
     find ${DIST} -type f -exec sed -i "s#\$<POSTGRESQL_DATA>#${POSTGRESQL_DATA}#g" {} \;
     find ${DIST} -type f -exec sed -i "s#\$<POSTGRESQL_DOCKER_IMAGE>#${POSTGRESQL_DOCKER_IMAGE}#g" {} \;
     find ${DIST} -type f -exec sed -i "s#\$<POSTGRESQL_DB_DUMP>#${POSTGRESQL_DB_DUMP}#g" {} \;
-    find ${DIST} -type f -exec sed -i "s#\$<DOCKER-COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
-    find ${DIST} -type f -exec sed -i "s#\$<ORTHANC-CONFIG>#${ORTHANC_CONFIG}#g" {} \;
-    find ${DIST} -type f -exec sed -i "s#\$<ORTHANC-IP>#${ORTHANC_IP}#g" {} \;
+    find ${DIST} -type f -exec sed -i "s#\$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
+    find ${DIST} -type f -exec sed -i "s#\$<ORTHANC_CONFIG>#${ORTHANC_CONFIG}#g" {} \;
+    find ${DIST} -type f -exec sed -i "s#\$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
     find ${DIST} -type f -exec sed -i "s#\$<CERTIFICATE_SERVER>#${CERTIFICATE_SERVER}#g" {} \;
 }
 

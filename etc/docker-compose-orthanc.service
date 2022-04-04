@@ -1,6 +1,6 @@
 # v0.1.1 
 #
-# /etc/systemd/system/docker-compose-orthanc.service 
+# /etc/systemd/system/DOCKER_COMPOSE-orthanc.service 
 #
 # Startup and shut down orthanc cleanly
 #
@@ -8,7 +8,7 @@
 Description=Docker Compose Orthanc Service
 Requires=docker.service
 After=docker.service
-RequiresMountsFor=$<ORTHANC-DATA-MOUNT>
+RequiresMountsFor=$<ORTHANC_DATA_MOUNT>
 
 [Service]
 WorkingDirectory=/usr/local/lib/orthanc/postgresql
