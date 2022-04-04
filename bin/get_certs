@@ -7,8 +7,8 @@
 SOURCESRV="$<CERTIFICATE_SERVER>"
 BASE="/docker/volumes/proxy/letsencrypt/live/npm-1/"
 SOURCE="${SOURCESRV}:${BASE}"
-DEST="$<ORTHANC_CONFIG>/orthanc-reverse-proxy/"
+DEST="$<ORTHANC_CONFIG>/nginx-reverse-proxy/"
 
 scp "${SOURCE}cert.pem" "${DEST}" || exit
 scp "${SOURCE}privkey.pem" "${DEST}" || exit
-docker restart orthanc-reverse-proxy
+docker restart nginx-reverse-proxy

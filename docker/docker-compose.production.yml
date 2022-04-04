@@ -3,16 +3,16 @@
 #
 version: "2"
 services:
-  orthanc-reverse-proxy:
-    build: orthanc-reverse-proxy
-    container_name: orthanc-reverse-proxy
+  nginx-reverse-proxy:
+    build: nginx
+    container_name: nginx-reverse-proxy
     environment: 
       PUID: "1000"
       PGID: "1000"
       TZ: "Europe/Rome"
     volumes: [
-      "$<ORTHANC-CONFIG>/orthanc-reverse-proxy/site-confs:/config/nginx/site-confs:ro",
-      "$<ORTHANC-CONFIG>/orthanc-reverse-proxy/keys:/config/keys:ro"
+      "$<ORTHANC-CONFIG>/nginx-reverse-proxy/site-confs:/config/nginx/site-confs:ro",
+      "$<ORTHANC-CONFIG>/nginx-reverse-proxy/keys:/config/keys:ro"
     ]
     restart: unless-stopped
     ports: [
