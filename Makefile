@@ -1,5 +1,5 @@
 DIST = ./dist
-DEST_SERVER = orthanc
+DEST_SERVER = username@orthanc_server_name.lan
 
 # username@ip_address of server which contains SSL certificates to grab.
 CERTIFICATE_SERVER = username@server_name.lan
