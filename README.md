@@ -92,6 +92,12 @@ There currently is not yet a fully released version. Released version will be in
 the `main` branch. You can however find work in progress code in `develop`
 branch. Documentation is in the `gh-pages` branch, and is accessible
 [here](https://www.open-ortho.org/ortho-tank/).
+1. Edit the `Makefile` and check that variables are OK. Specifically the `DEST_SERVER` and `CERTIFICATE_SERVER`, with proper credentials.
+2. Run
+
+    make all
+    make deploy
+
 
 <!-- ROADMAP -->
 ## Roadmap
