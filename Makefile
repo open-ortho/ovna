@@ -22,7 +22,7 @@ POSTGRESQL_DOCKER_IMAGE = orthanc_orthanc-index_1
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
 
-.PHONY: clean all substitution
+.PHONY: clean all substitution deploy
 
 clean:
 	rm -rf $(DIST)
@@ -51,3 +51,10 @@ substitution:
 	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_CONFIG>#${ORTHANC_CONFIG}#g" {} \;
 	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
 	find $(DIST) -type f -exec sed -i "s#\$$<CERTIFICATE_SERVER>#${CERTIFICATE_SERVER}#g" {} \;
+deploy: all
+# Fully expanded rsync options. Same as -auv, except without --time --perms
+	rsync --links --owner --group --recursive --update --verbose --devices --specials "$(DIST)/" "$(DEST_SERVER):$(ORTHANC_CONFIG)/" 
+	echo "WARNING!! Next step will prompt for root password, and restart orthanc server !!"
+	echo "Ctrl-C to interrupt"
+	read
+	ssh -t "$(DEST_SERVER)" "sudo $(ORTHANC_CONFIG)/bin/orthanc_restart.sh"
