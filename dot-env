@@ -2,8 +2,26 @@
 # Copy this file into .env and modify to your needs.
 DEST_SERVER = username@orthanc_server_name.lan
 
-ORTHANC_IP = # IP address to use for the Orthanc PACS.
+# IP address to use for the Orthanc PACS. End with ":"
+ORTHANC_IP = 127.0.0.1:
 
 # username@ip_address of server which contains SSL certificates to grab.
 CERTIFICATE_SERVER = username@server_name.lan
 
+# Location for Orthanc configuration
+ORTHANC_CONFIG = /usr/local/etc/orthanc
+
+# Location where Orthanc stores it's data. Escape slashes for sed.
+ORTHANC_DATA_MOUNT = /mnt/orthanc
+
+# Location where PostgreSQL will store data folder.
+POSTGRESQL_DATA = /var/lib/postgresql/data
+
+# Destination for PostgreSQL database dumps
+POSTGRESQL_DB_DUMP = /mnt/orthanc/index/postgres-backup.sql
+
+# Name of docker image of PostgreSQL
+POSTGRESQL_DOCKER_IMAGE = postgresql
+
+# Location of docker-compose binary
+DOCKER_COMPOSE = /usr/local/bin
