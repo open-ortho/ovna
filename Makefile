@@ -16,7 +16,7 @@ POSTGRESQL_DATA = /var/lib/postgresql/data
 POSTGRESQL_DB_DUMP = /mnt/orthanc/index/postgres-backup.sql
 
 # Name of docker image of PostgreSQL
-POSTGRESQL_DOCKER_IMAGE = postgresql
+DATABASE_DOCKER_IMAGE = postgresql
 
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
@@ -47,7 +47,7 @@ substitution:
 # Substitute all $<> variables
 	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_DATA_MOUNT>#${ORTHANC_DATA_MOUNT}#g" {} \;
 	find $(DIST) -type f -exec sed -i "s#\$$<POSTGRESQL_DATA>#${POSTGRESQL_DATA}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<POSTGRESQL_DOCKER_IMAGE>#${POSTGRESQL_DOCKER_IMAGE}#g" {} \;
+	find $(DIST) -type f -exec sed -i "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
 	find $(DIST) -type f -exec sed -i "s#\$$<POSTGRESQL_DB_DUMP>#${POSTGRESQL_DB_DUMP}#g" {} \;
 	find $(DIST) -type f -exec sed -i "s#\$$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
 	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_CONFIG>#${ORTHANC_CONFIG}#g" {} \;

@@ -21,7 +21,7 @@ services:
     ]
   orthanc:
     build: orthanc
-    depends_on: [orthanc-index]
+    depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
     ports: [
       "$<ORTHANC_IP>104:4242"
@@ -39,7 +39,7 @@ services:
       ORTHANC__STONE_WEB_VIEWER__DATE_FORMAT: "YYYY-MM-DD"
 
 
-  orthanc-index:
+  $<DATABASE_DOCKER_IMAGE>:
     image: postgres
     restart: unless-stopped
     volumes: [
