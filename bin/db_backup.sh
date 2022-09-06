@@ -9,7 +9,7 @@
 
 INPROGRESS="$<POSTGRESQL_DB_DUMP>.in-progress.gz"
 
-docker exec -i "$<DOCKER_POSTGRESQL_IMAGE>" /usr/bin/pg_dump \
+docker exec -i "$<POSTGRESQL_DOCKER_IMAGE>" /usr/bin/pg_dump \
  -U postgres postgres | gzip -c > "${INPROGRESS}" || exit
 
  mv "${INPROGRESS}" "$<POSTGRESQL_DB_DUMP>.gz"
