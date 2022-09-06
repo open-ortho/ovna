@@ -1,7 +1,7 @@
 {
   "_version": "0.1.1",
-  "Name": "ORTHO TANK",
-  "DicomAet": "ORTHO TANK",
+  "Name": "OVNA",
+  "DicomAet": "OVNA",
   "DicomModalities": {
     "CLIENT1": [
       "CLIENT1",
@@ -28,7 +28,7 @@
     "EnableIndex": true,
     "IndexConnectionsCount": 10,
     "EnableStorage": false,
-    "Host": "orthanc-index",
+    "Host": "$<DATABASE_DOCKER_IMAGE>",
     "Database": "postgres",
     "Username": "postgres",
     "Password": "postgres"
