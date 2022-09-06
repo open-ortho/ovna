@@ -16,15 +16,15 @@ services:
     ]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC_IP>:80:80",
-      "$<ORTHANC_IP>:443:443",
+      "$<ORTHANC_IP>80:80",
+      "$<ORTHANC_IP>443:443",
     ]
   orthanc:
     build: orthanc
     depends_on: [orthanc-index]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC_IP>:104:4242"
+      "$<ORTHANC_IP>104:4242"
       ]
     volumes: [
       "$<ORTHANC_DATA_MOUNT>/storage:/var/lib/orthanc/db:Z",
