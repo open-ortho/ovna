@@ -1,9 +1,6 @@
 VERSION = 
 PROJECT_NAME = ovna
 
-include .env
-export $(shell sed 's/=.*//' .env)
-
 DIST = ./dist
 
 # Location for Orthanc configuration
@@ -19,10 +16,13 @@ POSTGRESQL_DATA = /var/lib/postgresql/data
 POSTGRESQL_DB_DUMP = /mnt/orthanc/index/postgres-backup.sql
 
 # Name of docker image of PostgreSQL
-POSTGRESQL_DOCKER_IMAGE = orthanc_orthanc-index_1
+POSTGRESQL_DOCKER_IMAGE = postgresql
 
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
+
+include .env
+export $(shell sed 's/=.*//' .env)
 
 .PHONY: clean all substitution deploy
 
