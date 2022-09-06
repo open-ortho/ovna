@@ -1,8 +1,10 @@
-DIST = ./dist
-DEST_SERVER = username@orthanc_server_name.lan
+VERSION = 
+PROJECT_NAME = ovna
 
-# username@ip_address of server which contains SSL certificates to grab.
-CERTIFICATE_SERVER = username@server_name.lan
+include .env
+export $(shell sed 's/=.*//' .env)
+
+DIST = ./dist
 
 # Location for Orthanc configuration
 ORTHANC_CONFIG = /usr/local/etc/orthanc

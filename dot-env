@@ -1,0 +1,9 @@
+# Example .env file.
+# Copy this file into .env and modify to your needs.
+DEST_SERVER = username@orthanc_server_name.lan
+
+ORTHANC_IP = # IP address to use for the Orthanc PACS.
+
+# username@ip_address of server which contains SSL certificates to grab.
+CERTIFICATE_SERVER = username@server_name.lan
+
