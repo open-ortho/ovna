@@ -8,21 +8,21 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/open-ortho/ortho-tank">
-    <img src="https://raw.githubusercontent.com/open-ortho/ortho-tank/master/images/open-ortho.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/open-ortho/ovena">
+    <img src="https://raw.githubusercontent.com/open-ortho/ovena/master/images/open-ortho.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">ortho-tank 0.1.3</h3>
+  <h3 align="center">Ovena 0.1.3</h3>
 
   <p align="center">
     Documentation and scripts to simplify the installation and maintenance of an Orthanc based PACS Imaging Server for the orthodontic practice.
     <br />
-    <a href="http://www.open-ortho.org/ortho-tank/"><strong>Explore the docs »</strong></a>
+    <a href="http://www.open-ortho.org/ovena/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/open-ortho/ortho-tank/issues">Report Bug</a>
+    <a href="https://github.com/open-ortho/ovena/issues">Report Bug</a>
     ·
-    <a href="https://github.com/open-ortho/ortho-tank/issues">Request Feature</a>
+    <a href="https://github.com/open-ortho/ovena/issues">Request Feature</a>
   </p>
 </p>
 
@@ -89,7 +89,7 @@ acknowledgements.
 ## Getting Started
 
 Full documentation is in the `gh-pages` branch, and is accessible
-[here](https://www.open-ortho.org/ortho-tank/).
+[here](https://www.open-ortho.org/ovena/).
 
 1. Edit the `Makefile` and check that variables are OK. Specifically the `DEST_SERVER` and `CERTIFICATE_SERVER`, with proper credentials.
 2. Run
@@ -101,7 +101,7 @@ Full documentation is in the `gh-pages` branch, and is accessible
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/open-ortho/ortho-tank/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/open-ortho/ovena/issues) for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -124,7 +124,7 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 Toni Magni- [@zgypa](https://twitter.com/zgypa) - open-ortho@afm.co
 
-Project Link: [https://github.com/open-ortho/ortho-tank](https://github.com/open-ortho/ortho-tank)
+Project Link: [https://github.com/open-ortho/ovena](https://github.com/open-ortho/ovena)
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
@@ -134,16 +134,16 @@ Project Link: [https://github.com/open-ortho/ortho-tank](https://github.com/open
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/open-ortho/ortho-tank.svg?style=for-the-badge
-[contributors-url]: https://github.com/open-ortho/ortho-tank/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/open-ortho/ortho-tank.svg?style=for-the-badge
-[forks-url]: https://github.com/open-ortho/ortho-tank/network/members
-[stars-shield]: https://img.shields.io/github/stars/open-ortho/ortho-tank.svg?style=for-the-badge
-[stars-url]: https://github.com/open-ortho/ortho-tank/stargazers
-[issues-shield]: https://img.shields.io/github/issues/open-ortho/ortho-tank.svg?style=for-the-badge
-[issues-url]: https://github.com/open-ortho/ortho-tank/issues
-[license-shield]: https://img.shields.io/github/license/open-ortho/ortho-tank.svg?style=for-the-badge
-[license-url]: https://github.com/open-ortho/ortho-tank/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/open-ortho/ovena.svg?style=for-the-badge
+[contributors-url]: https://github.com/open-ortho/ovena/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/open-ortho/ovena.svg?style=for-the-badge
+[forks-url]: https://github.com/open-ortho/ovena/network/members
+[stars-shield]: https://img.shields.io/github/stars/open-ortho/ovena.svg?style=for-the-badge
+[stars-url]: https://github.com/open-ortho/ovena/stargazers
+[issues-shield]: https://img.shields.io/github/issues/open-ortho/ovena.svg?style=for-the-badge
+[issues-url]: https://github.com/open-ortho/ovena/issues
+[license-shield]: https://img.shields.io/github/license/open-ortho/ovena.svg?style=for-the-badge
+[license-url]: https://github.com/open-ortho/ovena/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/open-ortho
 [product-screenshot]: images/screenshot.png
