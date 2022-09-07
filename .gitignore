@@ -1,4 +1,6 @@
+.env
 build/
 dist/
 docs/_build/
 .vscode/
+Pipfile.lock

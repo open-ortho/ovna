@@ -8,22 +8,22 @@
 <!-- PROJECT LOGO -->
 <br />
 <p style="text-align: center;">
-  <a href="https://github.com/open-ortho/ovna">
-    <img src="https://raw.githubusercontent.com/open-ortho/ovna/master/images/open-ortho.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/open-ortho/ovena">
+    <img src="https://raw.githubusercontent.com/open-ortho/ovena/master/images/open-ortho.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 style="text-align: center;">OVNA 0.1.3</h3>
+  <h3 style="text-align: center;">OVENA 0.1.3</h3>
   <h4 style="text-align: center;">Open-ortho Vendor Neutral Archive</h4>
 
   <p style="text-align: center;">
     Documentation and scripts to simplify the installation and maintenance of an Orthanc based PACS Imaging Server for the orthodontic practice.
     <br />
-    <a href="http://www.open-ortho.org/ovna/"><strong>Explore the docs »</strong></a>
+    <a href="http://www.open-ortho.org/ovena/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/open-ortho/ovna/issues">Report Bug</a>
+    <a href="https://github.com/open-ortho/ovena/issues">Report Bug</a>
     ·
-    <a href="https://github.com/open-ortho/ovna/issues">Request Feature</a>
+    <a href="https://github.com/open-ortho/ovena/issues">Request Feature</a>
   </p>
 </p>
 
@@ -92,12 +92,12 @@ acknowledgements.
 There currently is not yet a fully released version. Released version will be in
 the `main` branch. You can however find work in progress code in `develop`
 branch. Documentation is in the `gh-pages` branch, and is accessible
-[here](https://www.open-ortho.org/ovna/).
+[here](https://www.open-ortho.org/ovena/).
 
 <!-- ROADMAP -->
 ## Roadmap
 
-See the [open issues](https://github.com/open-ortho/ovna/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/open-ortho/ovena/issues) for a list of proposed features (and known issues).
 
 <!-- CONTRIBUTING -->
 ## Contributing
@@ -120,7 +120,7 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 Toni Magni- [@zgypa](https://twitter.com/zgypa) - open-ortho@afm.co
 
-Project Link: [https://github.com/open-ortho/ovna](https://github.com/open-ortho/ovna)
+Project Link: [https://github.com/open-ortho/ovena](https://github.com/open-ortho/ovena)
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
@@ -130,16 +130,16 @@ Project Link: [https://github.com/open-ortho/ovna](https://github.com/open-ortho
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/open-ortho/ovna.svg?style=for-the-badge
-[contributors-url]: https://github.com/open-ortho/ovna/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/open-ortho/ovna.svg?style=for-the-badge
-[forks-url]: https://github.com/open-ortho/ovna/network/members
-[stars-shield]: https://img.shields.io/github/stars/open-ortho/ovna.svg?style=for-the-badge
-[stars-url]: https://github.com/open-ortho/ovna/stargazers
-[issues-shield]: https://img.shields.io/github/issues/open-ortho/ovna.svg?style=for-the-badge
-[issues-url]: https://github.com/open-ortho/ovna/issues
-[license-shield]: https://img.shields.io/github/license/open-ortho/ovna.svg?style=for-the-badge
-[license-url]: https://github.com/open-ortho/ovna/blob/master/LICENSE
+[contributors-shield]: https://img.shields.io/github/contributors/open-ortho/ovena.svg?style=for-the-badge
+[contributors-url]: https://github.com/open-ortho/ovena/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/open-ortho/ovena.svg?style=for-the-badge
+[forks-url]: https://github.com/open-ortho/ovena/network/members
+[stars-shield]: https://img.shields.io/github/stars/open-ortho/ovena.svg?style=for-the-badge
+[stars-url]: https://github.com/open-ortho/ovena/stargazers
+[issues-shield]: https://img.shields.io/github/issues/open-ortho/ovena.svg?style=for-the-badge
+[issues-url]: https://github.com/open-ortho/ovena/issues
+[license-shield]: https://img.shields.io/github/license/open-ortho/ovena.svg?style=for-the-badge
+[license-url]: https://github.com/open-ortho/ovena/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/open-ortho
 [product-screenshot]: images/screenshot.png
