@@ -1,7 +1,7 @@
 VERSION = 0.1.3
 PROJECT_NAME = ovena
 
-DIST = ./dist
+DIST = ./dist/$(PROJECT_NAME)
 
 # Location for Orthanc configuration
 ORTHANC_CONFIG = /usr/local/etc/orthanc
@@ -24,20 +24,22 @@ DOCKER_COMPOSE = /usr/local/bin
 include .env
 export $(shell sed 's/=.*//' .env)
 
-TARBALL = $(DIST)/$(PROJECT_NAME)-$(VERSION).tgz
+TARBALL = $(dir $(DIST))/$(PROJECT_NAME)-$(VERSION).tgz
+INSTALLER = bin/install-ovena.sh
 
 .PHONY: clean all substitution deploy
 
 clean:
-	rm -rf $(DIST)
+	rm -rf $(dir $(DIST))
 
 all: $(DIST)/bin $(DIST)/etc $(DIST)/docker substitution
 
 $(DIST):
-	mkdir $(DIST)
+	mkdir -p $(DIST)
 
 $(DIST)/bin: $(DIST)
 	cp -Rv bin $@
+	mv $(DIST)/$(INSTALLER) $(DIST)
 
 $(DIST)/etc: $(DIST)
 	cp -Rv etc $@
@@ -59,13 +61,14 @@ substitution:
 tarball: $(TARBALL)
 
 $(TARBALL): all
-	cd $(DIST) && tar zcvf ../$(notdir $@) ./
+	cd $(DIST)/.. && tar zcvf ../$(notdir $@) --exclude='$(notdir $@)' ./
+	rm -rf $(DIST)
 	mv $(notdir $@) $@
 
-deploy: all
+deploy: $(TARBALL)
 # Fully expanded rsync options. Same as -auv, except without --time --perms
-	rsync --links --owner --group --recursive --update --verbose --devices --specials "$(DIST)/" "$(DEST_SERVER):$(ORTHANC_CONFIG)/" 
+	rsync --links --owner --group --recursive --update --verbose --devices --specials "$(TARBALL)" "$(DEST_SERVER):/tmp" 
 	echo "WARNING!! Next step will prompt for root password, and restart orthanc server !!"
 	echo "Ctrl-C to interrupt"
-	read
-	ssh -t "$(DEST_SERVER)" "sudo $(ORTHANC_CONFIG)/bin/orthanc_restart.sh"
+	read A
+	ssh -t "$(DEST_SERVER)" "cd /tmp && tar zxvf $(notdir $(TARBALL)) && cd $(PROJECT_NAME) && sudo ./$(notdir $(INSTALLER))"
