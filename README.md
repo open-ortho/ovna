@@ -7,14 +7,15 @@
 
 <!-- PROJECT LOGO -->
 <br />
-<p align="center">
+<p style="text-align: center;">
   <a href="https://github.com/open-ortho/ovena">
     <img src="https://raw.githubusercontent.com/open-ortho/ovena/master/images/open-ortho.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Ovena 0.1.3</h3>
+  <h3 style="text-align: center;">Ovena 0.1.3</h3>
+  <h4 style="text-align: center;">Open-ortho VEndor Neutral Archive</h4>
 
-  <p align="center">
+  <p style="text-align: center;">
     Documentation and scripts to simplify the installation and maintenance of an Orthanc based PACS Imaging Server for the orthodontic practice.
     <br />
     <a href="http://www.open-ortho.org/ovena/"><strong>Explore the docs »</strong></a>
@@ -27,6 +28,7 @@
 </p>
 
 <!-- TABLE OF CONTENTS -->
+- [The Name Ovena](#the-name-ovena)
 - [About The Project](#about-the-project)
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
@@ -36,6 +38,9 @@
 - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
+## The Name Ovena
+
+_Ovena_ comes from the acronym for Open-ortho Vendor Neutral Archive, which technically should be _OVNA_. However we selected to include the extra 'e' of 'Vendor' because the name flows better and also because it so happens that [_ovena_ means door in finnish](https://en.wiktionary.org/wiki/ovena). It is actually the essive case of _ovi_ door, which translates to "as a door". And indeed, the PACS, in the medical practice, acts as a door, a portal through which images can move between different systems.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
