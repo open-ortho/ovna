@@ -45,14 +45,14 @@ $(DIST)/docker: $(DIST)
 
 substitution:
 # Substitute all $<> variables
-	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_DATA_MOUNT>#${ORTHANC_DATA_MOUNT}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<POSTGRESQL_DATA>#${POSTGRESQL_DATA}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<POSTGRESQL_DB_DUMP>#${POSTGRESQL_DB_DUMP}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_CONFIG>#${ORTHANC_CONFIG}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
-	find $(DIST) -type f -exec sed -i "s#\$$<CERTIFICATE_SERVER>#${CERTIFICATE_SERVER}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<ORTHANC_DATA_MOUNT>#${ORTHANC_DATA_MOUNT}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<POSTGRESQL_DATA>#${POSTGRESQL_DATA}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<POSTGRESQL_DB_DUMP>#${POSTGRESQL_DB_DUMP}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<ORTHANC_CONFIG>#${ORTHANC_CONFIG}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
+	find $(DIST) -type f -exec sed -i '' -e "s#\$$<CERTIFICATE_SERVER>#${CERTIFICATE_SERVER}#g" {} \;
 deploy: all
 # Fully expanded rsync options. Same as -auv, except without --time --perms
 	rsync --links --owner --group --recursive --update --verbose --devices --specials "$(DIST)/" "$(DEST_SERVER):$(ORTHANC_CONFIG)/" 
