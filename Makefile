@@ -16,7 +16,7 @@ POSTGRESQL_DATA = /var/lib/postgresql/data
 POSTGRESQL_DB_DUMP = /mnt/orthanc/index/postgres-backup.sql
 
 # Name of docker image of PostgreSQL
-DATABASE_DOCKER_IMAGE = postgresql
+DATABASE_DOCKER_IMAGE = database
 
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
