@@ -27,6 +27,8 @@
   </p>
 </p>
 
+The project is currently not released yet. You can find current development in the `develop` branch.
+
 <!-- TABLE OF CONTENTS -->
 - [About The Project](#about-the-project)
   - [Built With](#built-with)
