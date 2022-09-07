@@ -4,19 +4,19 @@ PROJECT_NAME = ovena
 DIST = ./dist/$(PROJECT_NAME)
 
 # Location for Orthanc configuration
-ORTHANC_CONFIG = /usr/local/etc/orthanc
+ORTHANC_CONFIG = /usr/local/etc/ovena
 
 # Location where Orthanc stores it's data. Escape slashes for sed.
-ORTHANC_DATA_MOUNT = /mnt/orthanc
+ORTHANC_DATA_MOUNT = /mnt/ovena
 
 # Location where PostgreSQL will store data folder.
 POSTGRESQL_DATA = /var/lib/postgresql/data
 
-# Destination for PostgreSQL database dumps
-POSTGRESQL_DB_DUMP = /mnt/orthanc/index/postgres-backup.sql
-
 # Name of docker image of PostgreSQL
 DATABASE_DOCKER_IMAGE = database
+
+# Destination for PostgreSQL database dumps
+POSTGRESQL_DB_DUMP = $(ORTHANC_DATA_MOUNT)/$(DATABASE_DOCKER_IMAGE)/postgres-backup.sql
 
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
