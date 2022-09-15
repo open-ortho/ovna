@@ -28,7 +28,7 @@ services:
       ]
     volumes: [
       "$<ORTHANC_DATA_MOUNT>/storage:/var/lib/orthanc/db:Z",
-      "$<ORTHANC_CONFIG>/orthanc.production.json:/etc/orthanc/orthanc.json:ro"
+      "$<ORTHANC_CONFIG>/orthanc/orthanc.production.json:/etc/orthanc/orthanc.json:ro"
       ]
     environment: 
       VERBOSE_ENABLED: "false"
