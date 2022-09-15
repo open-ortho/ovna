@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# v0.1.1
+# v0.1.3
 #
 # Backup orthanc PostgreSQL DB to NFS share of ZFS pool.  link to this file from
 # /etc/cron.hourly.  No need to rotate file, as snapshots are done in ZFS pool
