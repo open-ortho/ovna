@@ -11,8 +11,8 @@ services:
       PGID: "1000"
       TZ: "Europe/Rome"
     volumes: [
-      "$<ORTHANC_CONFIG>/nginx-reverse-proxy/site-confs:/config/nginx/site-confs:ro",
-      "$<ORTHANC_CONFIG>/nginx-reverse-proxy/keys:/config/keys:ro"
+      "$<ORTHANC_CONFIG>/nginx/default.conf:/config/nginx/site-confs/default.conf:ro",
+      "$<ORTHANC_CONFIG>/nginx-reverse-proxy/keys:/config/keys:rw"
     ]
     restart: unless-stopped
     ports: [

@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "This is Ovena Installer"
 
 echo "Create directories"
-mkdir -vp "$<ORTHANC_CONFIG>" "$<ORTHANC_DATA_MOUNT>" "$<POSTGRESQL_DATA>" || exit 1
+rm -vrf "$<ORTHANC_CONFIG>" 
+mkdir -vp "$<ORTHANC_CONFIG>/nginx-reverse-proxy/"{keys} "$<ORTHANC_DATA_MOUNT>" "$<POSTGRESQL_DATA>" || exit 1
 mkdir -vp "$(dirname $<POSTGRESQL_DB_DUMP>)" || exit 1
 
 echo "Update and install packages"

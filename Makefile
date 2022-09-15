@@ -71,4 +71,4 @@ deploy: $(TARBALL)
 	echo "WARNING!! Next step will prompt for root password, and restart orthanc server !!"
 	echo "Ctrl-C to interrupt"
 	read A
-	ssh -t "$(DEST_SERVER)" "cd /tmp && tar zxvf $(notdir $(TARBALL)) && cd $(PROJECT_NAME) && sudo ./$(notdir $(INSTALLER))"
+	ssh -t "$(DEST_SERVER)" "cd /tmp && rm -rf ovena && tar zxvf $(notdir $(TARBALL)) && cd $(PROJECT_NAME) && sudo ./$(notdir $(INSTALLER))"
