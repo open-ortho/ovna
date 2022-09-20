@@ -25,3 +25,10 @@ DATABASE_DOCKER_IMAGE = database
 
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
+
+# Credentials to mount remote SMB share for remote image storage
+SMB_USER = ovena
+SMB_PASS = ovena-password
+SMB_DOMAIN = WORKGROUP
+SMB_SERVER = nas
+SMB_SHARE = ovena
