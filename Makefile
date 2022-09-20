@@ -67,7 +67,7 @@ $(TARBALL): all
 
 deploy: $(TARBALL)
 # Fully expanded rsync options. Same as -auv, except without --time --perms
-	rsync --links --owner --group --recursive --update --verbose --devices --specials "$(TARBALL)" "$(DEST_SERVER):/tmp" 
+	scp "$(TARBALL)" "$(DEST_SERVER):/tmp" 
 	echo "WARNING!! Next step will prompt for root password, and restart orthanc server !!"
 	echo "Ctrl-C to interrupt"
 	read A

@@ -8,7 +8,7 @@ mkdir -vp "$<ORTHANC_CONFIG>/nginx-reverse-proxy/"{keys} "$<ORTHANC_DATA_MOUNT>"
 mkdir -vp "$(dirname $<POSTGRESQL_DB_DUMP>)" || exit 1
 
 echo "Update and install packages"
-apt update && apt-get -y upgrade && apt install docker.io docker-compose || exit 1
+export DEBIAN_FRONTEND=noninteractive && apt update && apt-get -y upgrade && apt-get -y install docker.io docker-compose || exit 1
 apt autoremove
 
 echo "Copy configuration files"
