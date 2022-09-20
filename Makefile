@@ -43,7 +43,6 @@ $(DIST)/bin: $(DIST)
 
 $(DIST)/etc: $(DIST)
 	cp -Rv etc $@
-	tr -d '\015' <etc/smbcredentials >$@/smbcredentials
 
 $(DIST)/docker: $(DIST)
 	cp -Rv docker $@
