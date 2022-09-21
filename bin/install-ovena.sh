@@ -4,7 +4,7 @@ echo "This is Ovena Installer"
 
 echo "Create directories"
 rm -vrf "$<ORTHANC_CONFIG>" 
-mkdir -vp "$<ORTHANC_CONFIG>/nginx-reverse-proxy/"{keys} "$<ORTHANC_DATA_MOUNT>" "$<POSTGRESQL_DATA>" || exit 1
+mkdir -vp "$<ORTHANC_CONFIG>/nginx-reverse-proxy/keys" "$<POSTGRESQL_DATA>" || exit 1
 mkdir -vp "$(dirname $<POSTGRESQL_DB_DUMP>)" || exit 1
 
 echo "Update and install packages"
@@ -13,7 +13,6 @@ apt autoremove
 
 echo "Copy configuration files"
 cp -vR docker/* "$<ORTHANC_CONFIG>" || exit 1
-cp -v etc/* /etc/ || exit 1
-chmod 600 /etc/smbcredentials
+chmod 600 "$<ORTHANC_CONFIG>/docker-compose.yml" || exit 1
 
 cd "$<ORTHANC_CONFIG>" && docker-compose build

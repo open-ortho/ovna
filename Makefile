@@ -32,7 +32,7 @@ INSTALLER = bin/install-ovena.sh
 clean:
 	rm -rf $(dir $(DIST))
 
-all: $(DIST)/bin $(DIST)/etc $(DIST)/docker substitution
+all: $(DIST)/bin $(DIST)/docker substitution
 
 $(DIST):
 	mkdir -p $(DIST)
@@ -40,9 +40,6 @@ $(DIST):
 $(DIST)/bin: $(DIST)
 	cp -Rv bin $@
 	mv $(DIST)/$(INSTALLER) $(DIST)
-
-$(DIST)/etc: $(DIST)
-	cp -Rv etc $@
 
 $(DIST)/docker: $(DIST)
 	cp -Rv docker $@

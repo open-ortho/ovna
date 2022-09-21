@@ -51,6 +51,9 @@ services:
 volumes:
   orthanc-storage:
     driver: local
-    type: cifs
-    device: //$<SMB_SERVER>/$<SMB_SHARE>
-    o: "credentials=$<ORTHANC_CONFIG>/smbcredentials"
+    driver_opts:
+      type: cifs
+      device: //$<SMB_SERVER>/$<SMB_SHARE>
+      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+      # Unfortunately the credentials option doesn't work.
+      # o: "credentials=$<ORTHANC_CONFIG>/smbcredentials"
