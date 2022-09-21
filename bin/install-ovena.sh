@@ -16,14 +16,4 @@ cp -vR docker/* "$<ORTHANC_CONFIG>" || exit 1
 cp -v etc/* /etc/ || exit 1
 chmod 600 /etc/smbcredentials
 
-echo "Add mount to fstab"
-FSTAB_LINE="//$<SMB_SERVER>/$<SMB_SHARE> $<ORTHANC_DATA_MOUNT> cifs credentials=/etc/smbcredentials 0 0"
-if grep "$<ORTHANC_DATA_MOUNT>" /etc/fstab > /dev/null; then
-    echo "Found existing line with $<ORTHANC_DATA_MOUNT>. Replacing."
-    sed -i.bak "s#.*$<ORTHANC_DATA_MOUNT>.*#${FSTAB_LINE}#" /etc/fstab || exit 
-else
-    echo "Adding new line to /etc/fstab"
-    echo "${FSTAB_LINE}" >> /etc/fstab || exit
-fi
-
 cd "$<ORTHANC_CONFIG>" && docker-compose build

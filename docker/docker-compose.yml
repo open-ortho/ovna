@@ -27,8 +27,8 @@ services:
       "$<ORTHANC_IP>104:4242"
       ]
     volumes: [
-      "$<ORTHANC_DATA_MOUNT>/storage:/var/lib/orthanc/db:Z",
-      "$<ORTHANC_CONFIG>/orthanc/orthanc.production.json:/etc/orthanc/orthanc.json:ro"
+      orthanc-storage:/var/lib/orthanc/db:Z,
+      "$<ORTHANC_CONFIG>/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro"
       ]
     environment: 
       VERBOSE_ENABLED: "false"
@@ -47,3 +47,10 @@ services:
       ]
     environment:
       POSTGRES_PASSWORD: "postgres"
+
+volumes:
+  orthanc-storage:
+    driver: local
+    type: cifs
+    device: //$<SMB_SERVER>/$<SMB_SHARE>
+    o: "credentials=$<ORTHANC_CONFIG>/smbcredentials"
