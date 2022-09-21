@@ -1,5 +1,5 @@
 #
-# v0.1.3
+# v0.2.0
 #
 # Restart orthanc and look at logs.
 #

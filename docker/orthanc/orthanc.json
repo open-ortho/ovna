@@ -1,5 +1,5 @@
 {
-  "_version": "0.1.3",
+  "_version": "0.2.0",
   "Name": "ovena",
   "DicomAet": "ovena",
   "DicomModalities": {
