@@ -1,2 +1,2 @@
-# open-ortho orthanc v0.1.1
+# open-ortho orthanc v0.1.3
 FROM osimis/orthanc
