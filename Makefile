@@ -59,6 +59,7 @@ substitution:
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_DOMAIN>#${SMB_DOMAIN}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_SERVER>#${SMB_SERVER}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_SHARE>#${SMB_SHARE}#g" {} \;
+	find $(DIST) -type f -exec sed -i'' -e "s#\$$<PROJECT_NAME>#${PROJECT_NAME}#g" {} \;
 
 tarball: $(TARBALL)
 

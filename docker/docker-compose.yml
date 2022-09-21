@@ -5,7 +5,7 @@ version: "2"
 services:
   nginx-reverse-proxy:
     build: nginx
-    container_name: nginx-reverse-proxy
+    container_name: $<PROJECT_NAME>-nginx
     environment: 
       PUID: "1000"
       PGID: "1000"
@@ -21,6 +21,7 @@ services:
     ]
   orthanc:
     build: orthanc
+    container_name: $<PROJECT_NAME>-orthanc
     depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
     ports: [
@@ -41,6 +42,7 @@ services:
 
   $<DATABASE_DOCKER_IMAGE>:
     image: postgres
+    container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
     volumes: [
       "$<POSTGRESQL_DATA>:/var/lib/postgresql/data:Z"
