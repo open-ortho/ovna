@@ -7,10 +7,13 @@
 # with ZFS.
 #
 
-INPROGRESS="$<POSTGRESQL_DB_DUMP>.in-progress.gz"
+DBNAME="$<DATABASE_NAME>"
+DBUSER="$<DATABASE_USERNAME>"
+DBDUMPFILE="/mnt/backup/ovena-db-backup.sql"
+INPROGRESS="${DBDUMPFILE}.in-progress"
 
 docker exec -i "$<DATABASE_DOCKER_IMAGE>" /usr/bin/pg_dump \
- -U postgres postgres | gzip -c > "${INPROGRESS}" || exit
+ -U "$DBUSER" "$DBNAME" --file="${INPROGRESS}" || exit
 
- mv "${INPROGRESS}" "$<POSTGRESQL_DB_DUMP>.gz"
+docker exec -i "$<DATABASE_DOCKER_IMAGE>" mv "${INPROGRESS}" "$DBDUMP_FILE"
 

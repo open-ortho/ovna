@@ -4,10 +4,7 @@ PROJECT_NAME = ovena
 DIST = ./dist/$(PROJECT_NAME)
 
 # Location for Orthanc configuration
-ORTHANC_CONFIG = /usr/local/etc/ovena
-
-# Location where Orthanc stores it's data. Escape slashes for sed.
-ORTHANC_DATA_MOUNT = /mnt/ovena
+OVENA_CONFIG = /usr/local/etc/ovena
 
 # Location where PostgreSQL will store data folder.
 POSTGRESQL_DATA = /var/lib/postgresql/data
@@ -15,8 +12,11 @@ POSTGRESQL_DATA = /var/lib/postgresql/data
 # Name of docker image of PostgreSQL
 DATABASE_DOCKER_IMAGE = database
 
-# Destination for PostgreSQL database dumps
-POSTGRESQL_DB_DUMP = $(ORTHANC_DATA_MOUNT)/$(DATABASE_DOCKER_IMAGE)/postgres-backup.sql
+# Name of PostgreSQL Database to use for orthanc
+DATABASE_NAME = orthanc
+
+# Name of PostgreSQL Database to use for orthanc
+DATABASE_USERNAME = orthanc
 
 # Location of docker-compose binary
 DOCKER_COMPOSE = /usr/local/bin
@@ -46,12 +46,12 @@ $(DIST)/docker: $(DIST)
 
 substitution:
 # Substitute all $<> variables
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_DATA_MOUNT>#${ORTHANC_DATA_MOUNT}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<POSTGRESQL_DATA>#${POSTGRESQL_DATA}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<POSTGRESQL_DB_DUMP>#${POSTGRESQL_DB_DUMP}#g" {} \;
+	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_NAME>#${DATABASE_NAME}#g" {} \;
+	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_USERNAME>#${DATABASE_USERNAME}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_CONFIG>#${ORTHANC_CONFIG}#g" {} \;
+	find $(DIST) -type f -exec sed -i'' -e "s#\$$<OVENA_CONFIG>#${OVENA_CONFIG}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<CERTIFICATE_SERVER>#${CERTIFICATE_SERVER}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_USER>#${SMB_USER}#g" {} \;

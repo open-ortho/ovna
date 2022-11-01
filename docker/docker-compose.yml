@@ -11,8 +11,8 @@ services:
       PGID: "1000"
       TZ: "Europe/Rome"
     volumes: [
-      "$<ORTHANC_CONFIG>/nginx/default.conf:/config/nginx/site-confs/default.conf:ro",
-      "$<ORTHANC_CONFIG>/nginx-reverse-proxy/keys:/config/keys:rw"
+      "$<OVENA_CONFIG>/nginx/default.conf:/config/nginx/site-confs/default.conf:ro",
+      "$<OVENA_CONFIG>/nginx-reverse-proxy/keys:/config/keys:rw"
     ]
     restart: unless-stopped
     ports: [
@@ -29,7 +29,7 @@ services:
       ]
     volumes: [
       orthanc-storage:/var/lib/orthanc/db:Z,
-      "$<ORTHANC_CONFIG>/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro"
+      "$<OVENA_CONFIG>/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro"
       ]
     environment: 
       VERBOSE_ENABLED: "false"
@@ -45,7 +45,8 @@ services:
     container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
     volumes: [
-      "$<POSTGRESQL_DATA>:/var/lib/postgresql/data:Z"
+      "$<POSTGRESQL_DATA>:/var/lib/postgresql/data:Z",
+      "$<DATABASE_DOCKER_IMAGE>-backup:/mnt/backup"
       ]
     environment:
       POSTGRES_PASSWORD: "postgres"
@@ -57,5 +58,11 @@ volumes:
       type: cifs
       device: //$<SMB_SERVER>/$<SMB_SHARE>
       o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+  $<DATABASE_DOCKER_IMAGE>-backup:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //$<SMB_SERVER>/$<SMB_SHARE_DB_BACKUP>
+      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
       # Unfortunately the credentials option doesn't work.
-      # o: "credentials=$<ORTHANC_CONFIG>/smbcredentials"
+      # o: "credentials=$<OVENA_CONFIG>/smbcredentials"
