@@ -29,8 +29,8 @@
     "IndexConnectionsCount": 10,
     "EnableStorage": false,
     "Host": "$<DATABASE_DOCKER_IMAGE>",
-    "Database": "postgres",
-    "Username": "postgres",
+    "Database": "$<DATABASE_NAME>",
+    "Username": "$<DATABASE_USERNAME>",
     "Password": "postgres"
   },
   "DicomWeb": {

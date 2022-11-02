@@ -19,7 +19,7 @@ include .env
 export $(shell sed 's/=.*//' .env)
 
 TARBALL = $(dir $(DIST))/$(PROJECT_NAME)-$(VERSION).tgz
-INSTALLER = bin/install-ovena.sh
+INSTALLER = bin/ovena-install.sh
 
 .PHONY: clean all substitution deploy
 
