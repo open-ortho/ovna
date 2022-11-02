@@ -15,9 +15,6 @@ DATABASE_NAME = orthanc
 # Name of PostgreSQL Database to use for orthanc
 DATABASE_USERNAME = orthanc
 
-# Location of docker-compose binary
-DOCKER_COMPOSE = /usr/local/bin
-
 include .env
 export $(shell sed 's/=.*//' .env)
 
@@ -46,7 +43,6 @@ substitution:
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_NAME>#${DATABASE_NAME}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_USERNAME>#${DATABASE_USERNAME}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<OVENA_CONFIG>#${OVENA_CONFIG}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_USER>#${SMB_USER}#g" {} \;

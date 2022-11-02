@@ -8,12 +8,6 @@ ORTHANC_IP = 127.0.0.1:
 # Location for Orthanc configuration
 OVENA_CONFIG = /usr/local/etc/orthanc
 
-# Name of docker image of PostgreSQL
-DATABASE_DOCKER_IMAGE = database
-
-# Location of docker-compose binary
-DOCKER_COMPOSE = /usr/local/bin
-
 # Credentials to mount remote SMB share for remote image storage
 SMB_USER = ovena
 SMB_PASS = ovena-password
