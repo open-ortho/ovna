@@ -6,9 +6,6 @@ DIST = ./dist/$(PROJECT_NAME)
 # Location for Orthanc configuration
 OVENA_CONFIG = /usr/local/etc/ovena
 
-# Location where PostgreSQL will store data folder.
-POSTGRESQL_DATA = /var/lib/postgresql/data
-
 # Name of docker image of PostgreSQL
 DATABASE_DOCKER_IMAGE = database
 
@@ -46,7 +43,6 @@ $(DIST)/docker: $(DIST)
 
 substitution:
 # Substitute all $<> variables
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<POSTGRESQL_DATA>#${POSTGRESQL_DATA}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_NAME>#${DATABASE_NAME}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_USERNAME>#${DATABASE_USERNAME}#g" {} \;

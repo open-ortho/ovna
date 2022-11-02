@@ -8,9 +8,6 @@ ORTHANC_IP = 127.0.0.1:
 # Location for Orthanc configuration
 OVENA_CONFIG = /usr/local/etc/orthanc
 
-# Location where PostgreSQL will store data folder.
-POSTGRESQL_DATA = /var/lib/postgresql/data
-
 # Name of docker image of PostgreSQL
 DATABASE_DOCKER_IMAGE = database
 

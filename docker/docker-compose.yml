@@ -45,7 +45,6 @@ services:
     container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
     volumes: [
-      "$<POSTGRESQL_DATA>:/var/lib/postgresql/data:Z",
       "$<DATABASE_DOCKER_IMAGE>-backup:/mnt/backup"
       ]
     environment:
