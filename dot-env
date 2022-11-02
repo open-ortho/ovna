@@ -5,9 +5,6 @@ DEST_SERVER = username@orthanc_server_name.lan
 # IP address to use for the Orthanc PACS. End with ":"
 ORTHANC_IP = 127.0.0.1:
 
-# username@ip_address of server which contains SSL certificates to grab.
-CERTIFICATE_SERVER = username@server_name.lan
-
 # Location for Orthanc configuration
 OVENA_CONFIG = /usr/local/etc/orthanc
 

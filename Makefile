@@ -53,7 +53,6 @@ substitution:
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DOCKER_COMPOSE>#${DOCKER_COMPOSE}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<OVENA_CONFIG>#${OVENA_CONFIG}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<CERTIFICATE_SERVER>#${CERTIFICATE_SERVER}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_USER>#${SMB_USER}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_PASS>#${SMB_PASS}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_DOMAIN>#${SMB_DOMAIN}#g" {} \;

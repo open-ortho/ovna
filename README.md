@@ -96,7 +96,8 @@ acknowledgements.
 Full documentation is in the `gh-pages` branch, and is accessible
 [here](https://www.open-ortho.org/ovena/).
 
-1. Edit the `Makefile` and check that variables are OK. Specifically the `DEST_SERVER` and `CERTIFICATE_SERVER`, with proper credentials.
+1. Edit the `Makefile` and check that variables are OK. 
+2. Generate a `.env` file from `dot-env`.
 2. Run
 
     make all
