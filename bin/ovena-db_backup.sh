@@ -13,7 +13,7 @@ DBDUMPFILE="/mnt/backup/ovena-db-backup.sql"
 INPROGRESS="${DBDUMPFILE}.in-progress"
 
 docker exec -i "$<DATABASE_DOCKER_IMAGE>" /usr/bin/pg_dump \
- -U "$DBUSER" "$DBNAME" --file="${INPROGRESS}" || exit
+ --no-owner -U "$DBUSER" "$DBNAME" --file="${INPROGRESS}" || exit
 
 docker exec -i "$<DATABASE_DOCKER_IMAGE>" mv "${INPROGRESS}" "$DBDUMP_FILE"
 
