@@ -2,6 +2,9 @@
 
 echo "This is Ovena Installer"
 
+# If ovena is running, shut it down
+docker-compose -f "$<OVENA_CONFIG>/docker-compose.yml" stop 2> /dev/null
+
 echo "Create directories"
 rm -vrf "$<OVENA_CONFIG>" 
 mkdir -vp "$<OVENA_CONFIG>/nginx-reverse-proxy/keys" /usr/local/bin || exit 1
@@ -15,4 +18,4 @@ cp -vR docker/* "$<OVENA_CONFIG>" || exit 1
 cp -vR bin/ovena-* /usr/local/bin || exit 1
 chmod 600 "$<OVENA_CONFIG>/docker-compose.yml" || exit 1
 
-cd "$<OVENA_CONFIG>" && docker-compose build
+cd "$<OVENA_CONFIG>" && docker-compose build && docker-compose up -d "$<DATABASE_DOCKER_IMAGE>"
