@@ -20,8 +20,9 @@ fi
 
 echo "Dropping DB VOLUME"
 _docker-compose down
-docker volume rm "$<PROJECT_NAME>_pg_data" || exit
+rm -rf /var/lib/docker/volumes/postgresql/*
 
+echo "Starting DB and restoring."
 _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" && sleep 5
 
 # DBUSER and DBNAME are created by default by the docker container
