@@ -4,16 +4,14 @@
 version: "2"
 services:
   nginx-reverse-proxy:
-    build: nginx
+    image: lscr.io/linuxserver/nginx
     container_name: $<PROJECT_NAME>-nginx
     environment: 
       PUID: "1000"
       PGID: "1000"
       TZ: "Europe/Rome"
     volumes: [
-      /var/lib/docker/volumes/nginx/config:/config,
-      "$<OVENA_CONFIG>/nginx/default.conf:/config/nginx/site-confs/default.conf:ro",
-      "$<OVENA_CONFIG>/nginx-reverse-proxy/keys:/config/keys:rw"
+      "$<OVENA_CONFIG>/nginx/config:/config"
     ]
     restart: unless-stopped
     ports: [
@@ -21,7 +19,7 @@ services:
       "$<ORTHANC_IP>443:443",
     ]
   orthanc:
-    build: orthanc
+    image: osimis/orthanc
     container_name: $<PROJECT_NAME>-orthanc
     depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
