@@ -26,7 +26,11 @@ echo "Starting DB and restoring."
 _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" && sleep 5
 
 # DBUSER and DBNAME are created by default by the docker container
-
-if [ -f "$BKPFILE" ]; then
-    zcat "$1" | _exec /usr/bin/psql -v ON_ERROR_STOP=1 $USEROPT && _docker-compose up -d && echo "Restore completed."
-fi
+UNCOMPRESSED="/mnt/backup/.backup.sql"
+echo "Uncompressing backup... " && \
+echo "zcat /mnt/backup/$BKPFILE > $UNCOMPRESSED" | _exec bash && \
+echo "Restoring backup" && \
+_exec /usr/bin/psql -v ON_ERROR_STOP=1 $USEROPT --file="$UNCOMPRESSED" && \
+_exec rm "$UNCOMPRESSED" && \
+_docker-compose up -d && \
+echo "Restore completed."
