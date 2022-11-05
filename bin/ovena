@@ -1,0 +1,153 @@
+#!/bin/sh
+# POSIX
+
+DBNAME="$<DATABASE_NAME>"
+DBUSER="$<DATABASE_USERNAME>"
+alias _docker-compose="docker-compose -f $<OVENA_CONFIG>/docker-compose.yml"
+alias _exec="_docker-compose exec -T \"$<DATABASE_DOCKER_IMAGE>\""
+
+# Reset all variables that might be set
+file=
+verbose=0 # Variables to be evaluated as shell arithmetic should be initialized to a default or validated beforehand.
+
+while :; do
+    case $1 in
+    -h | -\? | --help) # Call a "show_help" function to display a synopsis, then exit.
+        show_help
+        exit
+        ;;
+    -f | --file) # Takes an option argument, ensuring it has been specified.
+        if [ -n "$2" ]; then
+            file=$2
+            shift
+        else
+            printf 'ERROR: "--file" requires a non-empty option argument.\n' >&2
+            exit 1
+        fi
+        ;;
+    --file=?*)
+        file=${1#*=} # Delete everything up to "=" and assign the remainder.
+        ;;
+    --file=) # Handle the case of an empty --file=
+        printf 'ERROR: "--file" requires a non-empty option argument.\n' >&2
+        exit 1
+        ;;
+    -v | --verbose)
+        verbose=$((verbose + 1)) # Each -v argument adds 1 to verbosity.
+        ;;
+    --) # End of all options.
+        shift
+        break
+        ;;
+    -?*)
+        printf 'WARN: Unknown option (ignored): %s\n' "$1" >&2
+        ;;
+    *) # Default case: If no more options then break out of the loop.
+        break ;;
+    esac
+
+    shift
+done
+
+# if --file was provided, open it for writing, else duplicate stdout
+if [ -n "$file" ]; then
+    exec 3>"$file"
+else
+    exec 3>&1
+fi
+
+show_help() {
+    printf "
+ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
+
+Options:
+    -h, --help          Print help screen and exit
+    -f, --file=FILENAME Specify filename to backup or restore.
+    -v, --verbose       Increase verbosity
+
+Commands:
+    backup: backup PostgreSQL database to <filename> in CIFS share
+            defined in $<OVENA_CONFIG>/docker-compose.yml
+
+    restore: restore PostgreSQL database from <filename> in CIFS share
+             defined in $<OVENA_CONFIG>/docker-compose.yml
+
+    upgrade:
+
+"
+}
+
+_restore() {
+    echo "Restoring from ${file}"
+    BKPFILE="${file}"
+    USEROPT="--username=${DBUSER}"
+
+    echo "Dropping DB VOLUME"
+    _docker-compose down
+    rm -rf /var/lib/docker/volumes/postgresql/*
+
+    echo "Starting DB and restoring."
+    _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" && sleep 5
+
+    # DBUSER and DBNAME are created by default by the docker container
+    case ${file} in
+    *.gz)
+        UNCOMPRESSED="/mnt/backup/.backup.sql"
+        echo -n "Uncompressing backup... " &&
+            echo "zcat /mnt/backup/${BKPFILE} > ${UNCOMPRESSED}" | _exec bash
+        echo "done."
+        ;;
+    *.sql)
+        UNCOMPRESSED="/mnt/backup/${BKPFILE}"
+        echo "cp /mnt/backup/${BKPFILE} > ${UNCOMPRESSED}" | _exec bash
+        ;;
+    esac
+    echo "Restoring backup" &&
+        _exec /usr/bin/psql -v ON_ERROR_STOP=1 ${USEROPT} --file="${UNCOMPRESSED}" &&
+        _exec rm "${UNCOMPRESSED}" &&
+        _docker-compose up -d &&
+        echo "Restore completed."
+}
+
+_upgrade() {
+    echo "Upgrade function not implemented."
+}
+
+_backup() {
+    if [ -z "${file}" ]; then
+        DBDUMPFILE="/mnt/backup/ovena-db-backup.sql"
+    else
+        DBDUMPFILE="/mnt/backup/${file}"
+    fi
+    echo -n "Backing up to ${DBDUMPFILE}... "
+    INPROGRESS="${DBDUMPFILE}.in-progress"
+
+    _exec /usr/bin/pg_dump \
+        --no-owner -U "${DBUSER}" "${DBNAME}" --file="${INPROGRESS}" || exit
+
+    _exec mv "${INPROGRESS}" "${DBDUMPFILE}" || exit
+    echo "done."
+    echo -n "Compressing... "
+    _exec gzip "${DBDUMPFILE}" || exit
+    echo "done."
+}
+
+command="${1}"
+case ${command} in
+backup)
+    _backup
+    exit
+    ;;
+restore)
+    _restore
+    exit
+    ;;
+upgrade)
+    _upgrade
+    exit
+    ;;
+*)
+    show_help
+    exit
+    ;;
+esac
