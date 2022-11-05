@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# Wrapper intended to be installed in /etc/cron.hourly
+#
+
+/usr/local/bin/ovena backup

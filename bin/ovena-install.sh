@@ -31,5 +31,6 @@ chmod 600 "$<OVENA_CONFIG>/docker-compose.yml" || exit 1
 echo "Copy scripts in /usr/local/bin"
 rm -f /usr/local/bin/ovena*
 cp -vR bin/ovena* /usr/local/bin || exit 1
+mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 
 cd "$<OVENA_CONFIG>" && docker-compose build && docker-compose up -d "$<DATABASE_DOCKER_IMAGE>"
