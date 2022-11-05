@@ -66,13 +66,17 @@ Options:
     -v, --verbose       Increase verbosity
 
 Commands:
-    backup: backup PostgreSQL database to <filename> in CIFS share
-            defined in $<OVENA_CONFIG>/docker-compose.yml
+    start:      Start up the ovena stack (DB, orthanc, proxy)
 
-    restore: restore PostgreSQL database from <filename> in CIFS share
-             defined in $<OVENA_CONFIG>/docker-compose.yml
+    stop:       Shutdown the ovena stack (DB, orthanc, proxy)
 
-    upgrade:
+    backup:     Backup PostgreSQL database to <filename> in CIFS  
+                share defined in $<OVENA_CONFIG>/docker-compose.yml
+
+    restore:    Restore PostgreSQL database from <filename> in CIFS share
+                defined in $<OVENA_CONFIG>/docker-compose.yml
+
+    upgrade:    Upgrade ovena containers.
 
 "
 }
@@ -134,6 +138,14 @@ _backup() {
 
 command="${1}"
 case ${command} in
+start)
+    _docker-compose up -d
+    exit
+    ;;
+stop)
+    _docker-compose stop
+    exit
+    ;;
 backup)
     _backup
     exit
