@@ -2,7 +2,7 @@
 
 printf "
 *******************************
-This is Ovena Installer v 0.2.0
+This is Ovena Installer v 0.2.1
 *******************************
 
 "
