@@ -1,4 +1,4 @@
-VERSION = 0.2.2
+VERSION = 0.2.1
 PROJECT_NAME = ovena
 
 DIST = ./dist/$(PROJECT_NAME)
