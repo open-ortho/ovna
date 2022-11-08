@@ -12,7 +12,7 @@
     <img src="https://raw.githubusercontent.com/open-ortho/ovena/master/images/open-ortho.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 style="text-align: center;">Ovena 0.2.0</h3>
+  <h3 style="text-align: center;">Ovena 0.2.1</h3>
   <h4 style="text-align: center;">Open-ortho VEndor Neutral Archive</h4>
 
   <p style="text-align: center;">
@@ -26,6 +26,8 @@
     <a href="https://github.com/open-ortho/ovena/issues">Request Feature</a>
   </p>
 </p>
+
+The project is currently not released yet. You can find current development in the `develop` branch.
 
 <!-- TABLE OF CONTENTS -->
 - [The Name Ovena](#the-name-ovena)
