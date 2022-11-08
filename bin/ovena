@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Ovena helper tool v. 0.2.2
+# Ovena helper tool v. 0.2.1
 #
 
 DBNAME="$<DATABASE_NAME>"
