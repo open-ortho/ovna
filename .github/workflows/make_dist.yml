@@ -1,0 +1,13 @@
+name: build-dist-package
+on:
+  push:
+    branches:
+      - 'release/**'
+      - '!release/**-dev'
+jobs:
+  build-tarball:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make tarball
+        run: make tarball

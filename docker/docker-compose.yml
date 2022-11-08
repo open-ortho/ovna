@@ -1,0 +1,68 @@
+#
+# open-ortho ovena v0.2.1
+#
+version: "2"
+services:
+  nginx-reverse-proxy:
+    image: lscr.io/linuxserver/nginx
+    container_name: $<PROJECT_NAME>-nginx
+    environment: 
+      PUID: "1000"
+      PGID: "1000"
+      TZ: "Europe/Rome"
+    volumes: [
+      "$<OVENA_CONFIG>/nginx/config:/config"
+    ]
+    restart: unless-stopped
+    ports: [
+      "$<ORTHANC_IP>80:80",
+      "$<ORTHANC_IP>443:443",
+    ]
+  orthanc:
+    image: osimis/orthanc
+    container_name: $<PROJECT_NAME>-orthanc
+    depends_on: [$<DATABASE_DOCKER_IMAGE>]
+    restart: unless-stopped
+    ports: [
+      "$<ORTHANC_IP>104:4242"
+      ]
+    volumes: [
+      orthanc-storage:/var/lib/orthanc/db:Z,
+      "$<OVENA_CONFIG>/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro"
+      ]
+    environment: 
+      VERBOSE_ENABLED: "false"
+      VERBOSE_STARTUP: "false"
+      OSIMIS_WEB_VIEWER1_PLUGIN_ENABLED: "true"
+      STONE_WEB_VIEWER_PLUGIN_ENABLED: "true"
+      DICOM_WEB_PLUGIN_ENABLED: "true"
+      ORTHANC__STONE_WEB_VIEWER__DATE_FORMAT: "YYYY-MM-DD"
+
+
+  $<DATABASE_DOCKER_IMAGE>:
+    image: postgres
+    container_name: $<PROJECT_NAME>-postgres
+    restart: unless-stopped
+    volumes: [
+      /var/lib/docker/volumes/postgresql:/var/lib/postgresql/data,
+      "$<DATABASE_DOCKER_IMAGE>-backup:/mnt/backup"
+      ]
+    environment:
+      POSTGRES_USER: "$<DATABASE_USERNAME>"
+      POSTGRES_PASSWORD: "postgres"
+
+volumes:
+  orthanc-storage:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //$<SMB_SERVER>/$<SMB_SHARE>
+      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+  $<DATABASE_DOCKER_IMAGE>-backup:
+    driver: local
+    driver_opts:
+      type: cifs
+      device: //$<SMB_SERVER>/$<SMB_SHARE_DB_BACKUP>
+      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+      # Unfortunately the credentials option doesn't work.
+      # o: "credentials=$<OVENA_CONFIG>/smbcredentials"

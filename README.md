@@ -12,8 +12,8 @@
     <img src="https://raw.githubusercontent.com/open-ortho/ovena/master/images/open-ortho.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 style="text-align: center;">OVENA 0.1.3</h3>
-  <h4 style="text-align: center;">Open-ortho Vendor Neutral Archive</h4>
+  <h3 style="text-align: center;">Ovena 0.2.1</h3>
+  <h4 style="text-align: center;">Open-ortho VEndor Neutral Archive</h4>
 
   <p style="text-align: center;">
     Documentation and scripts to simplify the installation and maintenance of an Orthanc based PACS Imaging Server for the orthodontic practice.
@@ -30,6 +30,7 @@
 The project is currently not released yet. You can find current development in the `develop` branch.
 
 <!-- TABLE OF CONTENTS -->
+- [The Name Ovena](#the-name-ovena)
 - [About The Project](#about-the-project)
   - [Built With](#built-with)
 - [Getting Started](#getting-started)
@@ -39,6 +40,9 @@ The project is currently not released yet. You can find current development in t
 - [Contact](#contact)
 - [Acknowledgements](#acknowledgements)
 
+## The Name Ovena
+
+_Ovena_ comes from the acronym for Open-ortho Vendor Neutral Archive, which technically should be _OVNA_. However we selected to include the extra 'e' of 'Vendor' because the name flows better and also because it so happens that [_ovena_ means door in finnish](https://en.wiktionary.org/wiki/ovena). It is actually the essive case of _ovi_ door, which translates to "as a door". And indeed, the PACS, in the medical practice, acts as a door, a portal through which images can move between different systems.
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -91,10 +95,16 @@ acknowledgements.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-There currently is not yet a fully released version. Released version will be in
-the `main` branch. You can however find work in progress code in `develop`
-branch. Documentation is in the `gh-pages` branch, and is accessible
+Full documentation is in the `gh-pages` branch, and is accessible
 [here](https://www.open-ortho.org/ovena/).
+
+1. Edit the `Makefile` and check that variables are OK. 
+2. Generate a `.env` file from `dot-env`.
+2. Run
+
+    make all
+    make deploy
+
 
 <!-- ROADMAP -->
 ## Roadmap
