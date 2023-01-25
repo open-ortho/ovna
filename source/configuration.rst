@@ -16,13 +16,10 @@ The recommended use of ovena is to use two NICs or LANs, one for administration 
 * Edit :code:`/etc/ovena/docker-compose.yml` and change the :code:`ports` directives accordingly.
 * Edit :code:`/etc/ssh/sshd_config` to set the `ListenAddress` with the new IP address.
 
-Configurazione dei client
--------------------------
+Client and Orthanc configuration
+--------------------------------
 
-Per le Query Retrieve tradizionali, bisogna configurare ogni client con
-indirizzo IP e AE Title che coincida qui nelle configurazioni.
-
-Per aggiungere/rimuovere/modificare, si trova tutto in
+For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc's live configuration ability via API.
 
 .. code-block::
 
