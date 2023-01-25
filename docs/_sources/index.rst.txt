@@ -17,6 +17,7 @@ Orthanc PACS Configuration for the Orthodontic Practice v0.1.1
 
    installation
    configuration
+   backup_restore
 
 Indeces and Tables
 ------------------

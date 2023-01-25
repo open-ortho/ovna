@@ -6,18 +6,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modifiche &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
+    <title>Configuration &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Backup and Restore" href="backup_restore.html" />
     <link rel="prev" title="Prima installazione" href="installation.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -27,10 +26,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="backup_restore.html" title="Backup and Restore"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="installation.html" title="Prima installazione"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modifiche</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
       </ul>
     </div>  
 
@@ -39,17 +41,23 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="modifiche">
-<h1>Modifiche<a class="headerlink" href="#modifiche" title="Permalink to this heading">¶</a></h1>
-<p>Le configurazioni si trovano in</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">/</span><span class="n">postgresql</span>
-</pre></div>
-</div>
-<section id="configurazione-dei-client">
-<h2>Configurazione dei client<a class="headerlink" href="#configurazione-dei-client" title="Permalink to this heading">¶</a></h2>
-<p>Per le Query Retrieve tradizionali, bisogna configurare ogni client con
-indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
-<p>Per aggiungere/rimuovere/modificare, si trova tutto in</p>
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h1>
+<p>Ovena configurations are in <code class="code docutils literal notranslate"><span class="pre">/etc</span></code>.</p>
+<section id="chainging-ip-address-or-hostname">
+<h2>Chainging IP Address or hostname<a class="headerlink" href="#chainging-ip-address-or-hostname" title="Permalink to this heading">¶</a></h2>
+<p>This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.</p>
+<p>The recommended use of ovena is to use two NICs or LANs, one for administration (ssh), the other for the orthanc services. When doing so, this requires to explicitly set the various services to listen to the correct IP address.</p>
+<ul class="simple">
+<li><p>Use <code class="code docutils literal notranslate"><span class="pre">hostnamectl</span> <span class="pre">set-hostname</span> <span class="pre">&lt;newhostname&gt;</span></code></p></li>
+<li><p>Edit <code class="code docutils literal notranslate"><span class="pre">/etc/hosts</span></code></p></li>
+<li><p>Edit <code class="code docutils literal notranslate"><span class="pre">/etc/ovena/docker-compose.yml</span></code> and change the <code class="code docutils literal notranslate"><span class="pre">ports</span></code> directives accordingly.</p></li>
+<li><p>Edit <code class="code docutils literal notranslate"><span class="pre">/etc/ssh/sshd_config</span></code> to set the <cite>ListenAddress</cite> with the new IP address.</p></li>
+</ul>
+</section>
+<section id="client-and-orthanc-configuration">
+<h2>Client and Orthanc configuration<a class="headerlink" href="#client-and-orthanc-configuration" title="Permalink to this heading">¶</a></h2>
+<p>For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc’s live configuration ability via API.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">orthanc</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
@@ -66,8 +74,9 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Modifiche</a><ul>
-<li><a class="reference internal" href="#configurazione-dei-client">Configurazione dei client</a></li>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#chainging-ip-address-or-hostname">Chainging IP Address or hostname</a></li>
+<li><a class="reference internal" href="#client-and-orthanc-configuration">Client and Orthanc configuration</a></li>
 </ul>
 </li>
 </ul>
@@ -77,6 +86,11 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
     <h4>Previous topic</h4>
     <p class="topless"><a href="installation.html"
                           title="previous chapter">Prima installazione</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="backup_restore.html"
+                          title="next chapter">Backup and Restore</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -106,15 +120,18 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="backup_restore.html" title="Backup and Restore"
+             >next</a> |</li>
+        <li class="right" >
           <a href="installation.html" title="Prima installazione"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modifiche</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, open-ortho.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>
