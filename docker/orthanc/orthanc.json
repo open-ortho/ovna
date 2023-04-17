@@ -42,5 +42,22 @@
     "QidoCaseSensitive": true, // For QIDO-RS server, whether search is case sensitive (since release 0.5)
     "StudiesMetadata": "Full", // How study-level metadata is retrieved (since release 1.1, cf. section below)
     "SeriesMetadata": "Full"   // How series-level metadata is retrieved (since release 1.1, cf. section below)
+  },
+  "OrthancExplorer2": {
+    "Enable": true,
+    "IsDefaultOrthancUI": false,
+    "UiOptions" : {
+      "EnableStudyList": true,
+      "EnableModification": true,
+      "MaxStudiesDisplayed": 100,
+      "StudyListSearchMode": "search-as-you-type",
+      "StudyListSearchAsYouTypeMinChars": 3,
+      "StudyListSearchAsYouTypeDelay": 400,
+      "StudyListContentIfNoSearch": "most-recents",
+      "EnableDicomModalities": true,
+      "EnableDownloadZip": true,
+      "EnableAnonymization": false,
+      "EnableSendTo": false
+    }
   }
 }
