@@ -45,10 +45,30 @@
   },
   "OrthancExplorer2": {
     "Enable": true,
-    "IsDefaultOrthancUI": false,
+    "IsDefaultOrthancUI": true,
+    "Root" : "/ui/",
     "UiOptions" : {
       "EnableStudyList": true,
       "EnableModification": true,
+      "Modifications": {
+        "DefaultMode": "modify-keep-uids",
+        "AllowedModes": ["modify-keep-uids"]
+      },
+      "PatientMainTags" : [
+        "PatientID",
+        "PatientName",
+        "PatientBirthDate",
+        "PatientSex"
+      ],
+      "StudyMainTags" : [
+        "StudyDescription",
+        "AccessionNumber",
+        "StudyID",
+        "RequestingPhysician",
+        "ReferringPhysicianName",
+        "InstitutionName"
+      ],
+      "SeriesMainTags" : [],
       "MaxStudiesDisplayed": 100,
       "StudyListSearchMode": "search-as-you-type",
       "StudyListSearchAsYouTypeMinChars": 3,
@@ -57,7 +77,36 @@
       "EnableDicomModalities": true,
       "EnableDownloadZip": true,
       "EnableAnonymization": false,
-      "EnableSendTo": false
+      "EnableSendTo": true,
+
+      "ModalitiesFilter": [
+        "CR", "CT", "DX", "MG", "MR", "NM", "OT", "PT", "PX", "SEG", "SR", "US", "XA"
+      ],
+      "ViewersIcons" : {
+        "osimis-web-viewer": "bi bi-eye",
+        "stone-webviewer": "bi bi-eye-fill",
+        "ohif": "bi bi-grid",
+        "meddream": "bi bi-columns-gap",
+        "volview": "bi bi-box"
+      },
+      "ViewersOrdering" : [
+        "osimis-web-viewer",
+        "stone-webviewer",
+        "ohif",
+        "meddream",
+        "volview"
+      ],
+      "EnableUpload": true, 
+           "UploadReportTags" : [                     
+            "PatientName",
+            "StudyDescription",
+            "PatientID",
+            "AccessionNumber",
+            "StudyDate"
+            ],
+      "EnableDeleteResources": true, 
+      "EnableSettings": true
+
     }
   }
 }
