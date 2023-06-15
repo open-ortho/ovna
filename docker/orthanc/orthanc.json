@@ -76,11 +76,11 @@
       "StudyListContentIfNoSearch": "most-recents",
       "EnableDicomModalities": true,
       "EnableDownloadZip": true,
-      "EnableAnonymization": false,
+      "EnableAnonymization": true,
       "EnableSendTo": true,
 
       "ModalitiesFilter": [
-        "CR", "CT", "DX", "MG", "MR", "NM", "OT", "PT", "PX", "SEG", "SR", "US", "XA"
+        "RG", "PX", "PR", "OSS", "M3D", "MR", "LS", "IO", "DX", "DOC", "CT"
       ],
       "ViewersIcons" : {
         "osimis-web-viewer": "bi bi-eye",
