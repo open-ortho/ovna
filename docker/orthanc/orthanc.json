@@ -80,7 +80,7 @@
       "EnableSendTo": true,
 
       "ModalitiesFilter": [
-        "RG", "PX", "PR", "OSS", "M3D", "MR", "LS", "IO", "DX", "DOC", "CT"
+        "RG", "PX", "PR", "OSS", "M3D", "MR", "LS", "IO", "DX", "DOC", "CT", "XC"
       ],
       "ViewersIcons" : {
         "osimis-web-viewer": "bi bi-eye",
