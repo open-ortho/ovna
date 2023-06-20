@@ -42,5 +42,71 @@
     "QidoCaseSensitive": true, // For QIDO-RS server, whether search is case sensitive (since release 0.5)
     "StudiesMetadata": "Full", // How study-level metadata is retrieved (since release 1.1, cf. section below)
     "SeriesMetadata": "Full"   // How series-level metadata is retrieved (since release 1.1, cf. section below)
+  },
+  "OrthancExplorer2": {
+    "Enable": true,
+    "IsDefaultOrthancUI": true,
+    "Root" : "/ui/",
+    "UiOptions" : {
+      "EnableStudyList": true,
+      "EnableModification": true,
+      "Modifications": {
+        "DefaultMode": "modify-keep-uids",
+        "AllowedModes": ["modify-keep-uids"]
+      },
+      "PatientMainTags" : [
+        "PatientID",
+        "PatientName",
+        "PatientBirthDate",
+        "PatientSex"
+      ],
+      "StudyMainTags" : [
+        "StudyDescription",
+        "AccessionNumber",
+        "StudyID",
+        "RequestingPhysician",
+        "ReferringPhysicianName",
+        "InstitutionName"
+      ],
+      "SeriesMainTags" : [],
+      "MaxStudiesDisplayed": 100,
+      "StudyListSearchMode": "search-as-you-type",
+      "StudyListSearchAsYouTypeMinChars": 3,
+      "StudyListSearchAsYouTypeDelay": 400,
+      "StudyListContentIfNoSearch": "most-recents",
+      "EnableDicomModalities": true,
+      "EnableDownloadZip": true,
+      "EnableAnonymization": true,
+      "EnableSendTo": true,
+
+      "ModalitiesFilter": [
+        "RG", "PX", "PR", "OSS", "M3D", "MR", "LS", "IO", "DX", "DOC", "CT", "XC"
+      ],
+      "ViewersIcons" : {
+        "osimis-web-viewer": "bi bi-eye",
+        "stone-webviewer": "bi bi-eye-fill",
+        "ohif": "bi bi-grid",
+        "meddream": "bi bi-columns-gap",
+        "volview": "bi bi-box"
+      },
+      "ViewersOrdering" : [
+        "osimis-web-viewer",
+        "stone-webviewer",
+        "ohif",
+        "meddream",
+        "volview"
+      ],
+      "EnableUpload": true, 
+           "UploadReportTags" : [                     
+            "PatientName",
+            "StudyDescription",
+            "PatientID",
+            "AccessionNumber",
+            "StudyDate"
+            ],
+      "EnableDeleteResources": true, 
+      "EnableSettings": true
+
+    }
   }
 }

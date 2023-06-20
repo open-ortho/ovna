@@ -19,7 +19,7 @@ services:
       "$<ORTHANC_IP>443:443",
     ]
   orthanc:
-    image: osimis/orthanc
+    image: osimis/orthanc:23.6.0
     container_name: $<PROJECT_NAME>-orthanc
     depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
@@ -40,7 +40,7 @@ services:
 
 
   $<DATABASE_DOCKER_IMAGE>:
-    image: postgres
+    image: postgres:15
     container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
     volumes: [
