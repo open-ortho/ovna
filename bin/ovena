@@ -116,66 +116,16 @@ _restore() {
         echo "Restore completed."
 }
 
-_newer_version_exists() {
-    ver1=$(curl -sL "https://api.github.com/repos/open-ortho/ovena/releases/latest" | jq -r ".tag_name")
-    ver2="$VERSION"
+_older_or_same_version_available() {
+    ver_available=$(curl -sL "https://api.github.com/repos/open-ortho/ovena/releases/latest" | jq -r ".tag_name")
+    ver_installed="$VERSION"
 
-    IFS='.' # Set the Internal Field Separator to dot (.)
-
-    # Split the version strings into separate variables
-    set -- $ver1
-    ver1_1="$1"
-    ver1_2="$2"
-    ver1_3="$3"
-
-    set -- $ver2
-    ver2_1="$1"
-    ver2_2="$2"
-    ver2_3="$3"
-
-    # Remove leading zeros
-    ver1_1=$(printf "%s" "$ver1_1" | sed 's/^0*//')
-    ver1_2=$(printf "%s" "$ver1_2" | sed 's/^0*//')
-    # Ignore -dev or other suffixes
-    ver1_3=$(printf "%s" "$ver1_3" | sed 's/^0*//' | sed 's/-.*//')
-
-    ver2_1=$(printf "%s" "$ver2_1" | sed 's/^0*//')
-    ver2_2=$(printf "%s" "$ver2_2" | sed 's/^0*//')
-    # Ignore -dev or other suffixes
-    ver2_3=$(printf "%s" "$ver2_3" | sed 's/^0*//' | sed 's/-.*//')
-
-    # Compare the parts
-    if [ "$ver1_1" -gt "$ver2_1" ]; then
-        echo "$ver1 is greater than $ver2"
-        return 0
-    elif [ "$ver1_1" -lt "$ver2_1" ]; then
-        echo "$ver1 is less than $ver2"
-        return 1
-    fi
-
-    if [ "$ver1_2" -gt "$ver2_2" ]; then
-        echo "$ver1 is greater than $ver2"
-        return 0
-    elif [ "$ver1_2" -lt "$ver2_2" ]; then
-        echo "$ver1 is less than $ver2"
-        return 1
-    fi
-
-    if [ "$ver1_3" -gt "$ver2_3" ]; then
-        echo "$ver1 is greater than $ver2"
-        return 0
-    elif [ "$ver1_3" -lt "$ver2_3" ]; then
-        echo "$ver1 is less than $ver2"
-        return 1
-    fi
-
-    echo "$ver1 is equal to $ver2"
-    return 2
+    printf '%s\n%s\n' "$ver_installed" "$ver_available" | sort --check=quiet --version-sort
 }
 
 _upgrade() {
     # Find out if there is a newer version.
-    if ! _newer_version_exists; then
+    if _older_or_same_version_available; then
         printf "No Updates available.\n"
         return 0
     fi
