@@ -71,4 +71,4 @@ deploy: $(TARBALL)
 	ssh -t "$(DEST_SERVER)" "cd /tmp && rm -rf ovena && tar zxvf $(notdir $(TARBALL)) && cd $(PROJECT_NAME) && ./$(notdir $(INSTALLER))"
 
 github-release:
-	gh release create --generate-notes $(VERSION) $(TARBALL)
+	gh release create --generate-notes $(PROJECT_NAME)-$(VERSION) $(TARBALL)
