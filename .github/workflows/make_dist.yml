@@ -10,6 +10,24 @@ jobs:
   build-tarball:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up GitHub CLI
+        uses: actions/setup-node@v2
+        with: 
+          node-version: 14
+
+      - name: Configure GitHub CLI with GitHub Token
+        run: |
+          echo "machine github.com login zgypa password ${{ github.token }}" >> ~/.netrc
+          gh auth login --with-token < "${HOME}/.netrc"
+
+      - name: Install GitHub CLI
+        run: npm install -g gh
+
       - name: Make tarball
         run: make tarball
+      
+      - name: Make GitHub Release
+        run: make github-release
