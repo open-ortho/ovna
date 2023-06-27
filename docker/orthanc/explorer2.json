@@ -62,7 +62,6 @@
             ],
       "EnableDeleteResources": true, 
       "EnableSettings": true
-
     }
   }
 }
