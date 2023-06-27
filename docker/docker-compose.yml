@@ -28,7 +28,7 @@ services:
       ]
     volumes: [
       orthanc-storage:/var/lib/orthanc/db:Z,
-      "$<OVENA_CONFIG>/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro"
+      "$<OVENA_CONFIG>/orthanc/:/etc/orthanc/:ro"
       ]
     environment: 
       VERBOSE_ENABLED: "false"
