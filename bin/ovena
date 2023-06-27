@@ -99,8 +99,8 @@ _restore() {
     case ${file} in
     *.gz)
         UNCOMPRESSED="/mnt/backup/.backup.sql"
-        echo -n "Uncompressing backup... " &&
-            echo "zcat /mnt/backup/${BKPFILE} > ${UNCOMPRESSED}" | _exec bash
+        printf "Uncompressing backup... " &&
+            printf "zcat /mnt/backup/%s > %s\n" "${BKPFILE}" "${UNCOMPRESSED}" | _exec bash
         echo "done."
         ;;
     *.sql)
@@ -125,7 +125,7 @@ _backup() {
     else
         DBDUMPFILE="/mnt/backup/${file}"
     fi
-    echo -n "Backing up to ${DBDUMPFILE}... "
+    printf "Backing up to %s... " "${DBDUMPFILE}"
     INPROGRESS="${DBDUMPFILE}.in-progress"
 
     _exec /usr/bin/pg_dump \
@@ -133,7 +133,7 @@ _backup() {
 
     _exec mv "${INPROGRESS}" "${DBDUMPFILE}" || exit
     echo "done."
-    echo -n "Compressing... "
+    printf "Compressing... "
     _exec gzip "${DBDUMPFILE}" || exit
     echo "done."
 }
