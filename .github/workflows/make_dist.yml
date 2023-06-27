@@ -1,5 +1,7 @@
 name: build-dist-package
 on:
+  workflow_dispatch:
+    
   push:
     branches:
       - 'release/**'
