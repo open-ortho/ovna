@@ -15,6 +15,8 @@ DATABASE_NAME = orthanc
 # Name of PostgreSQL Database to use for orthanc
 DATABASE_USERNAME = orthanc
 
+$(shell if [ ! -e .env ]; then cp dot-env .env; fi)
+
 include .env
 export $(shell sed 's/=.*//' .env)
 
