@@ -116,6 +116,10 @@ _restore() {
 }
 
 _upgrade() {
+    # Download latest ovena package
+    # Unpack
+    # Run install script
+    # cd /tmp && rm -rf ovena && tar zxvf $(notdir $(TARBALL)) && cd $(PROJECT_NAME) && ./$(notdir $(INSTALLER))
     echo "Upgrade function not implemented."
 }
 
