@@ -1,5 +1,7 @@
 name: build-dist-package
 on:
+  workflow_dispatch:
+    
   push:
     branches:
       - 'release/**'
@@ -8,6 +10,13 @@ jobs:
   build-tarball:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Make tarball
         run: make tarball
+      
+      - name: Make GitHub Release
+        run: make github-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,11 @@
+{
+  "PostgreSQL": {
+    "EnableIndex": true,
+    "IndexConnectionsCount": 10,
+    "EnableStorage": false,
+    "Host": "$<DATABASE_DOCKER_IMAGE>",
+    "Database": "$<DATABASE_NAME>",
+    "Username": "$<DATABASE_USERNAME>",
+    "Password": "postgres"
+  }
+}

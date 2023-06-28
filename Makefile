@@ -15,13 +15,15 @@ DATABASE_NAME = orthanc
 # Name of PostgreSQL Database to use for orthanc
 DATABASE_USERNAME = orthanc
 
+$(shell if [ ! -e .env ]; then cp dot-env .env; fi)
+
 include .env
 export $(shell sed 's/=.*//' .env)
 
 TARBALL = $(dir $(DIST))/$(PROJECT_NAME)-$(VERSION).tgz
 INSTALLER = bin/ovena-install.sh
 
-.PHONY: clean all substitution deploy
+.PHONY: clean all substitution deploy github-release tarball
 
 clean:
 	rm -rf $(dir $(DIST))
@@ -67,3 +69,6 @@ deploy: $(TARBALL)
 	echo "Ctrl-C to interrupt"
 	read A
 	ssh -t "$(DEST_SERVER)" "cd /tmp && rm -rf ovena && tar zxvf $(notdir $(TARBALL)) && cd $(PROJECT_NAME) && ./$(notdir $(INSTALLER))"
+
+github-release:
+	gh release create v$(VERSION) $(TARBALL) --generate-notes --title "$(PROJECT_NAME)-$(VERSION)" 

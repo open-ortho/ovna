@@ -3,6 +3,7 @@
 # Ovena helper tool v. 0.2.1-dev
 #
 
+VERSION="0.2.1-dev"
 DBNAME="$<DATABASE_NAME>"
 DBUSER="$<DATABASE_USERNAME>"
 alias _docker-compose="docker-compose -f $<OVENA_CONFIG>/docker-compose.yml"
@@ -34,6 +35,10 @@ while :; do
         printf 'ERROR: "--file" requires a non-empty option argument.\n' >&2
         exit 1
         ;;
+    -V | --version)
+        printf "\nThis is Ovena v%s \n\n" "${VERSION}"
+        exit 0
+        ;;
     -v | --verbose)
         verbose=$((verbose + 1)) # Each -v argument adds 1 to verbosity.
         ;;
@@ -60,27 +65,34 @@ fi
 
 show_help() {
     printf "
+Ovena v%s
+
 ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
 
 Options:
-    -h, --help          Print help screen and exit
-    -f, --file=FILENAME Specify filename to backup or restore.
-    -v, --verbose       Increase verbosity
+    -h, --help          Print help screen and exit.
+    -V, --version       Print version and quit.
+    -f, --file=FILENAME Specify filename to backup to or to restore from.
+    -v, --verbose       Increase verbosity.
 
 Commands:
-    start:      Start up the ovena stack (DB, orthanc, proxy)
+    start:      Start up the ovena stack (DB, orthanc, proxy).
 
-    stop:       Shutdown the ovena stack (DB, orthanc, proxy)
+    stop:       Shutdown the ovena stack (DB, orthanc, proxy).
+
+    reload:     Restart only Orthanc service. Use to reload config changes.
+
+    logs:       Continuosly print Orthanc service logs.
 
     backup:     Backup PostgreSQL database to <filename> in CIFS  
-                share defined in $<OVENA_CONFIG>/docker-compose.yml
+                share defined in $<OVENA_CONFIG>/docker-compose.yml.
 
     restore:    Restore PostgreSQL database from <filename> in CIFS share
-                defined in $<OVENA_CONFIG>/docker-compose.yml
+                defined in $<OVENA_CONFIG>/docker-compose.yml.
 
-    upgrade:    Upgrade ovena containers.
+    upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
 
-"
+" "${VERSION}"
 }
 
 _restore() {
@@ -99,8 +111,8 @@ _restore() {
     case ${file} in
     *.gz)
         UNCOMPRESSED="/mnt/backup/.backup.sql"
-        echo -n "Uncompressing backup... " &&
-            echo "zcat /mnt/backup/${BKPFILE} > ${UNCOMPRESSED}" | _exec bash
+        printf "Uncompressing backup... " &&
+            printf "zcat /mnt/backup/%s > %s\n" "${BKPFILE}" "${UNCOMPRESSED}" | _exec bash
         echo "done."
         ;;
     *.sql)
@@ -115,8 +127,31 @@ _restore() {
         echo "Restore completed."
 }
 
+_older_or_same_version_available() {
+    ver_available=$(curl -sL "https://api.github.com/repos/open-ortho/ovena/releases/latest" | jq -r ".tag_name")
+    ver_installed="$VERSION"
+
+    printf '%s\n%s\n' "$ver_installed" "$ver_available" | sort --check=quiet --version-sort
+}
+
 _upgrade() {
-    echo "Upgrade function not implemented."
+    # Find out if there is a newer version.
+    if _older_or_same_version_available; then
+        printf "No Updates available.\n"
+        return 0
+    fi
+
+    _tmpdir="$(mktemp -d)"
+    _tarball="$(mktemp)"
+    # Download latest ovena package
+    curl -sL "https://api.github.com/repos/open-ortho/ovena/tarball" > "${_tarball}"
+
+    # Unpack and run install script
+    cd "${_tmpdir}" && \
+    tar zxvf "${_tarball}" && \
+    cd ovena && \
+    ./ovena-install.sh && \
+    echo "Upgrade Completed succesfully."
 }
 
 _backup() {
@@ -125,7 +160,7 @@ _backup() {
     else
         DBDUMPFILE="/mnt/backup/${file}"
     fi
-    echo -n "Backing up to ${DBDUMPFILE}... "
+    printf "Backing up to %s... " "${DBDUMPFILE}"
     INPROGRESS="${DBDUMPFILE}.in-progress"
 
     _exec /usr/bin/pg_dump \
@@ -133,7 +168,7 @@ _backup() {
 
     _exec mv "${INPROGRESS}" "${DBDUMPFILE}" || exit
     echo "done."
-    echo -n "Compressing... "
+    printf "Compressing... "
     _exec gzip "${DBDUMPFILE}" || exit
     echo "done."
 }
@@ -145,7 +180,15 @@ start)
     exit
     ;;
 stop)
-    _docker-compose stop
+    _docker-compose down
+    exit
+    ;;
+reload)
+    _docker-compose restart orthanc
+    exit
+    ;;
+logs)
+    _docker-compose logs -f orthanc
     exit
     ;;
 backup)
