@@ -36,7 +36,7 @@ while :; do
         exit 1
         ;;
     -V | --version)
-        printf "\nThis is Ovena v%s" "${VERSION}\n\n"
+        printf "\nThis is Ovena v%s \n\n" "${VERSION}"
         exit 0
         ;;
     -v | --verbose)
