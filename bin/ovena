@@ -13,6 +13,38 @@ alias _exec="_docker-compose exec -T \"$<DATABASE_DOCKER_IMAGE>\""
 file=
 verbose=0 # Variables to be evaluated as shell arithmetic should be initialized to a default or validated beforehand.
 
+show_help() {
+    printf "
+Ovena v%s
+
+ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
+
+Options:
+    -h, --help          Print help screen and exit.
+    -V, --version       Print version and quit.
+    -f, --file=FILENAME Specify filename to backup to or to restore from.
+    -v, --verbose       Increase verbosity.
+
+Commands:
+    start:      Start up the ovena stack (DB, orthanc, proxy).
+
+    stop:       Shutdown the ovena stack (DB, orthanc, proxy).
+
+    reload:     Restart only Orthanc service. Use to reload config changes.
+
+    logs:       Continuosly print Orthanc service logs.
+
+    backup:     Backup PostgreSQL database to <filename> in CIFS  
+                share defined in $<OVENA_CONFIG>/docker-compose.yml.
+
+    restore:    Restore PostgreSQL database from <filename> in CIFS share
+                defined in $<OVENA_CONFIG>/docker-compose.yml.
+
+    upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
+
+" "${VERSION}"
+}
+
 while :; do
     case $1 in
     -h | -\? | --help) # Call a "show_help" function to display a synopsis, then exit.
@@ -63,39 +95,8 @@ else
     exec 3>&1
 fi
 
-show_help() {
-    printf "
-Ovena v%s
-
-ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
-
-Options:
-    -h, --help          Print help screen and exit.
-    -V, --version       Print version and quit.
-    -f, --file=FILENAME Specify filename to backup to or to restore from.
-    -v, --verbose       Increase verbosity.
-
-Commands:
-    start:      Start up the ovena stack (DB, orthanc, proxy).
-
-    stop:       Shutdown the ovena stack (DB, orthanc, proxy).
-
-    reload:     Restart only Orthanc service. Use to reload config changes.
-
-    logs:       Continuosly print Orthanc service logs.
-
-    backup:     Backup PostgreSQL database to <filename> in CIFS  
-                share defined in $<OVENA_CONFIG>/docker-compose.yml.
-
-    restore:    Restore PostgreSQL database from <filename> in CIFS share
-                defined in $<OVENA_CONFIG>/docker-compose.yml.
-
-    upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
-
-" "${VERSION}"
-}
-
 _restore() {
+    if [ ! -e "${file}" ]; then echo "No backup file ${file} was found." && exit 1; fi
     echo "Restoring from ${file}"
     BKPFILE="${file}"
     USEROPT="--username=${DBUSER}"
