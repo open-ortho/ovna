@@ -35,6 +35,10 @@ while :; do
         printf 'ERROR: "--file" requires a non-empty option argument.\n' >&2
         exit 1
         ;;
+    -V | --version)
+        printf "\nThis is Ovena v%s" "${VERSION}\n\n"
+        exit 0
+        ;;
     -v | --verbose)
         verbose=$((verbose + 1)) # Each -v argument adds 1 to verbosity.
         ;;
@@ -61,27 +65,34 @@ fi
 
 show_help() {
     printf "
+Ovena v%s
+
 ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
 
 Options:
-    -h, --help          Print help screen and exit
+    -h, --help          Print help screen and exit.
+    -V, --version       Print version and quit.
     -f, --file=FILENAME Specify filename to backup to or to restore from.
-    -v, --verbose       Increase verbosity
+    -v, --verbose       Increase verbosity.
 
 Commands:
-    start:      Start up the ovena stack (DB, orthanc, proxy)
+    start:      Start up the ovena stack (DB, orthanc, proxy).
 
-    stop:       Shutdown the ovena stack (DB, orthanc, proxy)
+    stop:       Shutdown the ovena stack (DB, orthanc, proxy).
+
+    reload:     Restart only Orthanc service. Use to reload config changes.
+
+    logs:       Continuosly print Orthanc service logs.
 
     backup:     Backup PostgreSQL database to <filename> in CIFS  
-                share defined in $<OVENA_CONFIG>/docker-compose.yml
+                share defined in $<OVENA_CONFIG>/docker-compose.yml.
 
     restore:    Restore PostgreSQL database from <filename> in CIFS share
-                defined in $<OVENA_CONFIG>/docker-compose.yml
+                defined in $<OVENA_CONFIG>/docker-compose.yml.
 
     upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
 
-"
+" "${VERSION}"
 }
 
 _restore() {
@@ -169,7 +180,15 @@ start)
     exit
     ;;
 stop)
-    _docker-compose stop
+    _docker-compose down
+    exit
+    ;;
+reload)
+    _docker-compose restart orthanc
+    exit
+    ;;
+logs)
+    _docker-compose logs -f orthanc
     exit
     ;;
 backup)
