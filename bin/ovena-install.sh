@@ -33,4 +33,5 @@ rm -f /usr/local/bin/ovena*
 cp -vR bin/ovena* /usr/local/bin || exit 1
 mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 
-cd "$<OVENA_CONFIG>" && docker-compose build && docker-compose up -d "$<DATABASE_DOCKER_IMAGE>"
+cd "$<OVENA_CONFIG>" && docker-compose build && \
+/usr/local/bin/ovena start
