@@ -59,6 +59,10 @@ chmod 1777 /tmp
 export DEBIAN_FRONTEND=noninteractive && apt update && apt-get -y upgrade && apt-get -y install docker.io docker-compose cifs-utils curl ntp || exit 1
 apt autoremove
 
+echo "Install newer docker-compose. The debian default one was giving problems."
+curl -SL https://github.com/docker/compose/releases/download/v2.19.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+chmod 755 /usr/local/bin/docker-compose
+
 echo "Copy configuration files"
 if [ ! -d "$<OVENA_CONFIG>/orthanc" ]; then
     cp -vR docker/* "$<OVENA_CONFIG>" || exit 1
