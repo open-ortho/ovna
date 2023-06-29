@@ -1,4 +1,4 @@
-# ortho-tank
+# Ovena
 
 A DICOM Imaging Server based on Orthanc for Orthodontic Practices
 
