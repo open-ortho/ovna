@@ -6,8 +6,18 @@
 VERSION="0.3.0-dev"
 DBNAME="$<DATABASE_NAME>"
 DBUSER="$<DATABASE_USERNAME>"
+ENV="$<OVENA_CONFIG>/ovena.env"
 alias _docker-compose="docker-compose -f $<OVENA_CONFIG>/docker-compose.yml"
 alias _exec="_docker-compose exec -T \"$<DATABASE_DOCKER_IMAGE>\""
+
+if [ ! -r "${ENV}" ]; then
+    printf "ERROR: cannot read configuration file [%s]\n" "${ENV}"
+    exit 1
+fi
+
+set -a
+# shellcheck source=../dot-env
+. "${ENV}" || exit 1
 
 # Reset all variables that might be set
 file=

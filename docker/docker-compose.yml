@@ -15,8 +15,8 @@ services:
     ]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC_IP>80:80",
-      "$<ORTHANC_IP>443:443",
+      "${ORTHANC_IP}80:80",
+      "${ORTHANC_IP}443:443",
     ]
   orthanc:
     image: osimis/orthanc:23.6.0
@@ -24,7 +24,7 @@ services:
     depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC_IP>104:4242"
+      "${ORTHANC_IP}104:4242"
       ]
     volumes: [
       orthanc-storage:/var/lib/orthanc/db:Z,
@@ -56,13 +56,13 @@ volumes:
     driver: local
     driver_opts:
       type: cifs
-      device: //$<SMB_SERVER>/$<SMB_SHARE>
-      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+      device: //${SMB_SERVER}/${SMB_SHARE}
+      o: "username=${SMB_USER},password=${SMB_PASS}"
   $<DATABASE_DOCKER_IMAGE>-backup:
     driver: local
     driver_opts:
       type: cifs
-      device: //$<SMB_SERVER>/$<SMB_SHARE_DB_BACKUP>
-      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+      device: //${SMB_SERVER}/${SMB_SHARE_DB_BACKUP}
+      o: "username=${SMB_USER},password=${SMB_PASS}"
       # Unfortunately the credentials option doesn't work.
       # o: "credentials=$<OVENA_CONFIG>/smbcredentials"
