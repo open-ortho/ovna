@@ -45,6 +45,10 @@ Commands:
 " "${VERSION}"
 }
 
+_log() {
+    printf " * %s\n" "$@"
+}
+
 while :; do
     case $1 in
     -h | -\? | --help) # Call a "show_help" function to display a synopsis, then exit.
@@ -88,49 +92,42 @@ while :; do
     shift
 done
 
-# if --file was provided, open it for writing, else duplicate stdout
-if [ -n "$file" ]; then
-    exec 3>"$file"
-else
-    exec 3>&1
-fi
-
 _restore() {
-    if [ ! -e "${file}" ]; then echo "No backup file ${file} was found." && exit 1; fi
-    echo "Restoring from ${file}"
+    if [ ! -r "${file}" ]; then printf "ERROR: No backup file [%s] was found.\n" "${file}" && exit 1; fi
+    _log "Restoring from ${file}"
     BKPFILE="${file}"
     BKPFILE_NAME="$(basename "${BKPFILE}")"
     BKPFILE_IN_CONTAINER="/mnt/backup/.backup.sql.gz"
     USEROPT="--username=${DBUSER}"
 
-    echo "Dropping DB VOLUME"
+    _log "Dropping DB VOLUME"
     _docker-compose down || exit 1
     rm -rf /var/lib/docker/volumes/postgresql/*
 
-    echo "Starting DB and restoring."
+    _log "Starting DB and restoring."
     _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" || exit 1
-    echo "Waiting for DB to start"
+    _log "Waiting for DB to start"
     sleep 5
-    echo "Copying backup inside container"
-    _docker-compose cp "${BKPFILE}" "ovena-orthanc:${BKPFILE_IN_CONTAINER}" || exit 1
+    _log "Copying backup inside container"
+    docker cp "${BKPFILE}" "ovena-postgres:${BKPFILE_IN_CONTAINER}" || exit 1
 
     # DBUSER and DBNAME are created by default by the docker container
     case ${BKPFILE} in
     *.gz)
         UNCOMPRESSED="/mnt/backup/.backup.sql"
-        printf "Uncompressing backup... " &&
+        printf " * Uncompressing backup... " &&
             printf "zcat %s > %s\n" "${BKPFILE_IN_CONTAINER}" "${UNCOMPRESSED}" | _exec bash
-        echo "done."
+        printf "done.\n"
         ;;
     *.sql)
         UNCOMPRESSED="${BKPFILE_IN_CONTAINER}"
         ;;
     esac
-    echo "Restoring backup" &&
+    _log "Restoring backup" &&
         _exec /usr/bin/psql -v ON_ERROR_STOP=1 ${USEROPT} --file="${UNCOMPRESSED}" &&
         _exec rm "${UNCOMPRESSED}" "${BKPFILE_IN_CONTAINER}" &&
         _docker-compose up -d &&
-        echo "Restore completed."
+        _log "Restore completed."
 }
 
 _older_or_same_version_available() {
@@ -157,7 +154,7 @@ _upgrade() {
     tar zxvf "${_tarball}" && \
     cd ovena && \
     ./ovena-install.sh && \
-    echo "Upgrade Completed succesfully."
+    _log "Upgrade Completed succesfully."
 }
 
 _backup() {
@@ -173,10 +170,10 @@ _backup() {
         --no-owner -U "${DBUSER}" "${DBNAME}" --file="${INPROGRESS}" || exit
 
     _exec mv "${INPROGRESS}" "${DBDUMPFILE}" || exit
-    echo "done."
+    _log "done."
     printf "Compressing... "
     _exec gzip "${DBDUMPFILE}" || exit
-    echo "done."
+    _log "done."
 }
 
 command="${1}"
