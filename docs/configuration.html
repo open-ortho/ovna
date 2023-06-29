@@ -3,9 +3,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Configuration changes &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
+    <title>Configuration &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -15,8 +15,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="How to Upgrade" href="upgrade.html" />
-    <link rel="prev" title="First Installation" href="installation.html" /> 
+    <link rel="next" title="Backup and Restore" href="backup_restore.html" />
+    <link rel="prev" title="Prima installazione" href="installation.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -25,13 +25,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="upgrade.html" title="How to Upgrade"
+          <a href="backup_restore.html" title="Backup and Restore"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="First Installation"
+          <a href="installation.html" title="Prima installazione"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Configuration changes</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
       </ul>
     </div>  
 
@@ -40,17 +40,27 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="configuration-changes">
-<h1>Configuration changes<a class="headerlink" href="#configuration-changes" title="Permalink to this heading">¶</a></h1>
-<p>Usually, only changes to Orthanc are needed. Orthanc onfigurations files are in:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ovena</span><span class="o">/</span><span class="n">orthanc</span><span class="o">/</span>
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this heading">¶</a></h1>
+<p>Ovena configurations are in <code class="code docutils literal notranslate"><span class="pre">/etc</span></code>.</p>
+<section id="chainging-ip-address-or-hostname">
+<h2>Chainging IP Address or hostname<a class="headerlink" href="#chainging-ip-address-or-hostname" title="Permalink to this heading">¶</a></h2>
+<p>This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.</p>
+<p>The recommended use of ovena is to use two NICs or LANs, one for administration (ssh), the other for the orthanc services. When doing so, this requires to explicitly set the various services to listen to the correct IP address.</p>
+<ul class="simple">
+<li><p>Use <code class="code docutils literal notranslate"><span class="pre">hostnamectl</span> <span class="pre">set-hostname</span> <span class="pre">&lt;newhostname&gt;</span></code></p></li>
+<li><p>Edit <code class="code docutils literal notranslate"><span class="pre">/etc/hosts</span></code></p></li>
+<li><p>Edit <code class="code docutils literal notranslate"><span class="pre">/etc/ovena/docker-compose.yml</span></code> and change the <code class="code docutils literal notranslate"><span class="pre">ports</span></code> directives accordingly.</p></li>
+<li><p>Edit <code class="code docutils literal notranslate"><span class="pre">/etc/ssh/sshd_config</span></code> to set the <cite>ListenAddress</cite> with the new IP address.</p></li>
+</ul>
+</section>
+<section id="client-and-orthanc-configuration">
+<h2>Client and Orthanc configuration<a class="headerlink" href="#client-and-orthanc-configuration" title="Permalink to this heading">¶</a></h2>
+<p>For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc’s live configuration ability via API.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">orthanc</span><span class="o">.</span><span class="n">json</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code>: basic Orthanc configuration, such as DICOM AET, port, etc.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">users.json</span></code>: usernames and passwords for the WADO, Dicomweb and configuration interfaces.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code>: this is where the DICOM “clients” need to reside for the traditional DIMSE protocol</p></li>
-</ul>
+</section>
 </section>
 
 
@@ -61,6 +71,17 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Configuration</a><ul>
+<li><a class="reference internal" href="#chainging-ip-address-or-hostname">Chainging IP Address or hostname</a></li>
+<li><a class="reference internal" href="#client-and-orthanc-configuration">Client and Orthanc configuration</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="installation.html"
                           title="previous chapter">First Installation</a></p>
@@ -69,6 +90,16 @@
     <h4>Next topic</h4>
     <p class="topless"><a href="upgrade.html"
                           title="next chapter">How to Upgrade</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="backup_restore.html"
+                          title="next chapter">Backup and Restore</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="backup_restore.html"
+                          title="next chapter">Backup and Restore</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -98,18 +129,18 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="upgrade.html" title="How to Upgrade"
+          <a href="backup_restore.html" title="Backup and Restore"
              >next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="First Installation"
+          <a href="installation.html" title="Prima installazione"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Configuration changes</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, open-ortho.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
     </div>
   </body>
 </html>

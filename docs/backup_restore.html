@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Backup and Restore &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Backup and Restore</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="backup-and-restore">
+<h1>Backup and Restore<a class="headerlink" href="#backup-and-restore" title="Permalink to this heading">¶</a></h1>
+<p>Procedure to properly backup and restore the VNA.</p>
+<p>Use the <code class="code docutils literal notranslate"><span class="pre">/usr/local/bin/ovena</span></code> script to perform backup and restore functions of the PostgreSQL Database dump.</p>
+<p>Backups and restores are done from inside the docker container, inside the folder <code class="code docutils literal notranslate"><span class="pre">/mnt/backup</span></code> which is mounted by docker-compose to a CIFS share of your choosing.</p>
+<p>We use ZFS for our datastore, and share it over CIFS. A single ZFS dataset will contain the live binary files (images), the DB dump and the orthanc configuration files.</p>
+<img alt="_images/ovena_backup.png" src="_images/ovena_backup.png" />
+<p>Mounting the CIFS with docker directly inside the container, and skipping the host was chosen for the following reasons:</p>
+<ul class="simple">
+<li><p>docker guarantees mounting and unmounting of the CIFS share.</p></li>
+<li><p>docker will not start up the service if the CIFS mount doesn’t work. This guarantees that orthanc will not accidentally start saving images on to local, unbacked up and orphaned directory.</p></li>
+<li><p>less configuration and setup required (all in docker-compose.yml, instead of <code class="code docutils literal notranslate"><span class="pre">/etc/fstab</span></code> plus some kind of logic to make sure docker doesn’t start the container, if volume is not mounted.)</p></li>
+<li><p>reduced risk for the host messing up the data, because the volumes are actually mounted deep in the <code class="code docutils literal notranslate"><span class="pre">/var/lib/docker</span></code> directory structure.</p></li>
+</ul>
+<section id="database-backup">
+<h2>Database Backup<a class="headerlink" href="#database-backup" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic simple">
+<li><p>During installation, you will have configured two CIFS shares which Ovena will use: one to store the actual Image data (large binary data), the other will be used to store the DB dumps.</p></li>
+<li><p>The <cite>/usr/local/bin/ovena –file=FILENAME backup</cite> script is used to create a DB dump. If you omit the <code class="code docutils literal notranslate"><span class="pre">--file</span></code> parameter, ovena will use <code class="code docutils literal notranslate"><span class="pre">ovena-db-backup.sql</span></code>. Pick a filename with the <code class="code docutils literal notranslate"><span class="pre">.sql</span></code> extension. Relative and absolute paths are not supported. Just a single filename.</p></li>
+<li><p>The backup script will dump into the provided filename, and then compress it with <code class="code docutils literal notranslate"><span class="pre">gzip</span></code>.</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ovena comes with a pre-configured hourly cron job to run the <code class="code docutils literal notranslate"><span class="pre">/usr/local/bin/ovena</span> <span class="pre">backup</span></code> command. There is a wrapper script in <code class="code docutils literal notranslate"><span class="pre">/etc/cron.hourly</span></code>. Moving it from that folder to <code class="code docutils literal notranslate"><span class="pre">/etc/cron.daily</span></code> or <code class="code docutils literal notranslate"><span class="pre">/etc/cron.weekly</span></code> will make ovena do backups only once a day or once a week respectively. This is all standard Debian/UNIX cron jobs.</p>
+</div>
+</section>
+<section id="images-binary-files-backup">
+<h2>Images binary files Backup<a class="headerlink" href="#images-binary-files-backup" title="Permalink to this heading">¶</a></h2>
+<p>Backup the image directory contents of the <cite>storage</cite> folder, the way you prefer. The folder will grow large, so it could be a good idea to have it network mounted on a NAS, which is then properly snapshotted and backed up.</p>
+<p>As shown in the diagram above, we have our NAS on an hourly snapshots schedule, and then we also back up the entire dataset to another external system.</p>
+<p>We choose not to package all image files into a single, say <code class="code docutils literal notranslate"><span class="pre">.tar</span></code> archive, because this would become very large.</p>
+</section>
+<section id="restore">
+<h2>Restore<a class="headerlink" href="#restore" title="Permalink to this heading">¶</a></h2>
+<ol class="arabic">
+<li><p>Set up the CIFS share on your NAS, in one of them there will be the entire images binary files, in the other the DB dump.</p></li>
+<li><p>Configure the <code class="code docutils literal notranslate"><span class="pre">/etc/ovena/docker-compose.yml</span></code> with the proper CIFS credentials.</p></li>
+<li><dl>
+<dt>Restore Database</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ovena</span> <span class="o">--</span><span class="n">file</span><span class="o">=&lt;</span><span class="n">backup</span> <span class="n">filename</span><span class="o">&gt;</span> <span class="n">restore</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>This step will shut down the containers, destroy the current database configuration files, bring up the database container (which will recreate a fresh database configuration), and restore the dump.</p>
+</li>
+<li><p>Restore Image files by putting in the CIFS share the restored image files.</p></li>
+<li><dl>
+<dt>Start up ovena services:</dt><dd><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ovena</span> <span class="n">start</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ol>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Backup and Restore</a><ul>
+<li><a class="reference internal" href="#database-backup">Database Backup</a></li>
+<li><a class="reference internal" href="#images-binary-files-backup">Images binary files Backup</a></li>
+<li><a class="reference internal" href="#restore">Restore</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="configuration.html"
+                          title="previous chapter">Configuration</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/backup_restore.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="configuration.html" title="Configuration"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Backup and Restore</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, open-ortho.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>
