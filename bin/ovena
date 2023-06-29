@@ -99,31 +99,36 @@ _restore() {
     if [ ! -e "${file}" ]; then echo "No backup file ${file} was found." && exit 1; fi
     echo "Restoring from ${file}"
     BKPFILE="${file}"
+    BKPFILE_NAME="$(basename "${BKPFILE}")"
+    BKPFILE_IN_CONTAINER="/mnt/backup/.backup.sql.gz"
     USEROPT="--username=${DBUSER}"
 
     echo "Dropping DB VOLUME"
-    _docker-compose down
+    _docker-compose down || exit 1
     rm -rf /var/lib/docker/volumes/postgresql/*
 
     echo "Starting DB and restoring."
-    _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" && sleep 5
+    _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" || exit 1
+    echo "Waiting for DB to start"
+    sleep 5
+    echo "Copying backup inside container"
+    _docker-compose cp "${BKPFILE}" "ovena-orthanc:${BKPFILE_IN_CONTAINER}" || exit 1
 
     # DBUSER and DBNAME are created by default by the docker container
-    case ${file} in
+    case ${BKPFILE} in
     *.gz)
         UNCOMPRESSED="/mnt/backup/.backup.sql"
         printf "Uncompressing backup... " &&
-            printf "zcat /mnt/backup/%s > %s\n" "${BKPFILE}" "${UNCOMPRESSED}" | _exec bash
+            printf "zcat %s > %s\n" "${BKPFILE_IN_CONTAINER}" "${UNCOMPRESSED}" | _exec bash
         echo "done."
         ;;
     *.sql)
-        UNCOMPRESSED="/mnt/backup/${BKPFILE}"
-        echo "cp /mnt/backup/${BKPFILE} > ${UNCOMPRESSED}" | _exec bash
+        UNCOMPRESSED="${BKPFILE_IN_CONTAINER}"
         ;;
     esac
     echo "Restoring backup" &&
         _exec /usr/bin/psql -v ON_ERROR_STOP=1 ${USEROPT} --file="${UNCOMPRESSED}" &&
-        _exec rm "${UNCOMPRESSED}" &&
+        _exec rm "${UNCOMPRESSED}" "${BKPFILE_IN_CONTAINER}" &&
         _docker-compose up -d &&
         echo "Restore completed."
 }
