@@ -13,3 +13,8 @@ This is a Debian distribution, and you can follow Debian procedures to change IP
 
 For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc's live configuration ability via API.
 
+You can restart just the Orthanc container using:
+
+.. code:: shell
+
+    ovena reload
