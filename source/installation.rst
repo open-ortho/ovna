@@ -8,6 +8,7 @@ First Installation
 # Run ``./ovena-install.sh``
 
 .. code-block:: shell
+
     curl --output ovena.tgz -L "https://api.github.com/repos/open-ortho/ovena/tarball"
 
     # Unpack and run install script

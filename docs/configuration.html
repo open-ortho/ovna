@@ -1,23 +1,22 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modifiche &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
+    <title>Configuration changes &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Prima installazione" href="installation.html" /> 
+    <link rel="next" title="How to Upgrade" href="upgrade.html" />
+    <link rel="prev" title="First Installation" href="installation.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -26,10 +25,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="installation.html" title="Prima installazione"
+          <a href="upgrade.html" title="How to Upgrade"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="First Installation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modifiche</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration changes</a></li> 
       </ul>
     </div>  
 
@@ -38,21 +40,17 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="modifiche">
-<h1>Modifiche<a class="headerlink" href="#modifiche" title="Permalink to this headline">¶</a></h1>
-<p>Le configurazioni si trovano in</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">/</span><span class="n">postgresql</span>
+  <section id="configuration-changes">
+<h1>Configuration changes<a class="headerlink" href="#configuration-changes" title="Permalink to this heading">¶</a></h1>
+<p>Usually, only changes to Orthanc are needed. Orthanc onfigurations files are in:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">ovena</span><span class="o">/</span><span class="n">orthanc</span><span class="o">/</span>
 </pre></div>
 </div>
-<section id="configurazione-dei-client">
-<h2>Configurazione dei client<a class="headerlink" href="#configurazione-dei-client" title="Permalink to this headline">¶</a></h2>
-<p>Per le Query Retrieve tradizionali, bisogna configurare ogni client con
-indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
-<p>Per aggiungere/rimuovere/modificare, si trova tutto in</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">orthanc</span><span class="o">.</span><span class="n">json</span>
-</pre></div>
-</div>
-</section>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code>: basic Orthanc configuration, such as DICOM AET, port, etc.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">users.json</span></code>: usernames and passwords for the WADO, Dicomweb and configuration interfaces.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code>: this is where the DICOM “clients” need to reside for the traditional DIMSE protocol</p></li>
+</ul>
 </section>
 
 
@@ -63,19 +61,14 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
-    <h3><a href="index.html">Table of Contents</a></h3>
-    <ul>
-<li><a class="reference internal" href="#">Modifiche</a><ul>
-<li><a class="reference internal" href="#configurazione-dei-client">Configurazione dei client</a></li>
-</ul>
-</li>
-</ul>
-
-  </div>
-  <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="installation.html"
-                          title="previous chapter">Prima installazione</a></p>
+                          title="previous chapter">First Installation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="upgrade.html"
+                          title="next chapter">How to Upgrade</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -93,7 +86,7 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -105,15 +98,18 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="installation.html" title="Prima installazione"
+          <a href="upgrade.html" title="How to Upgrade"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="First Installation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modifiche</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration changes</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, open-ortho.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
     </div>
   </body>
 </html>
