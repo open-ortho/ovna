@@ -42,11 +42,21 @@
             
   <section id="configuration-changes">
 <h1>Configuration changes<a class="headerlink" href="#configuration-changes" title="Permalink to this heading">¶</a></h1>
-<p>Usually, only changes to Orthanc are needed. Orthanc onfigurations files are in:</p>
-<p>This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.</p>
-<blockquote>
-<div><p>docker/postgresql</p>
-</div></blockquote>
+<p>There are two configurations:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/etc/ovena/ovena.env</span></code>: for credentials and IP addresses</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/etc/ovena/orthanc/*.json</span></code>: for all things DICOM and Orthanc</p></li>
+</ul>
+<section id="ovena-env">
+<h2><code class="docutils literal notranslate"><span class="pre">ovena.env</span></code><a class="headerlink" href="#ovena-env" title="Permalink to this heading">¶</a></h2>
+<p>Must have a minimum configuration of:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docker CIFS volumes don’t work well with hostnames! Use IP addresses.</p>
+</div>
+</section>
+<section id="json-files">
+<h2><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files<a class="headerlink" href="#json-files" title="Permalink to this heading">¶</a></h2>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code>: basic Orthanc configuration, such as DICOM AET, port, etc.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">users.json</span></code>: usernames and passwords for the WADO, Dicomweb and configuration interfaces.</p></li>
@@ -58,6 +68,21 @@
 </pre></div>
 </div>
 </section>
+<section id="changing-ip-address-of-smb-server">
+<h2>Changing IP address of SMB_SERVER<a class="headerlink" href="#changing-ip-address-of-smb-server" title="Permalink to this heading">¶</a></h2>
+<p>If you have to change the IP address of the SMB_SERVER, you will have to recreate the docker volume:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ovena</span> <span class="n">stop</span>
+<span class="n">docker</span> <span class="n">volume</span> <span class="n">remove</span> <span class="n">ovena_database</span><span class="o">-</span><span class="n">backup</span>
+<span class="n">docker</span> <span class="n">volume</span> <span class="n">remove</span> <span class="n">ovena_orthanc</span><span class="o">-</span><span class="n">storage</span>
+<span class="n">ovena</span> <span class="n">start</span>
+</pre></div>
+</div>
+</section>
+<section id="changing-the-ip-address-of-the-server-itself">
+<h2>Changing the IP address of the server itself<a class="headerlink" href="#changing-the-ip-address-of-the-server-itself" title="Permalink to this heading">¶</a></h2>
+<p>This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.</p>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -66,6 +91,19 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Configuration changes</a><ul>
+<li><a class="reference internal" href="#ovena-env"><code class="docutils literal notranslate"><span class="pre">ovena.env</span></code></a></li>
+<li><a class="reference internal" href="#json-files"><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files</a></li>
+<li><a class="reference internal" href="#changing-ip-address-of-smb-server">Changing IP address of SMB_SERVER</a></li>
+<li><a class="reference internal" href="#changing-the-ip-address-of-the-server-itself">Changing the IP address of the server itself</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="installation.html"

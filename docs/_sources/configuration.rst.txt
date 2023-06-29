@@ -1,11 +1,36 @@
 Configuration changes
 ======================
 
-Usually, only changes to Orthanc are needed. Orthanc onfigurations files are in:
+There are two configurations:
 
-This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.
+- ``/etc/ovena/ovena.env``: for credentials and IP addresses
+- ``/etc/ovena/orthanc/*.json``: for all things DICOM and Orthanc
 
-    docker/postgresql
+``ovena.env``
+-------------
+
+Must have a minimum configuration of:
+
+.. code:;
+
+    # IP address to use for the Orthanc PACS. End with ":"
+    ORTHANC_IP=X.X.X.X:
+
+    # Credentials to mount remote SMB share for remote image storage
+    SMB_USER=<username of SMB share>
+    SMB_PASS=<clear text password>
+    SMB_DOMAIN=WORKGROUP
+    SMB_SERVER=<IP address of SMB server>
+    SMB_SHARE=<Name of SMB Share>
+    SMB_SHARE_DB_BACKUP=<Name of SMB Share for database dumps>
+
+
+.. warning::
+
+    Docker CIFS volumes don't work well with hostnames! Use IP addresses.
+    
+``*.json`` files
+--------------------
 
 - ``orthanc.json``: basic Orthanc configuration, such as DICOM AET, port, etc.
 - ``users.json``: usernames and passwords for the WADO, Dicomweb and configuration interfaces.
@@ -18,3 +43,22 @@ You can restart just the Orthanc container using:
 .. code:: shell
 
     ovena reload
+
+Changing IP address of SMB_SERVER
+---------------------------------
+
+If you have to change the IP address of the SMB_SERVER, you will have to recreate the docker volume:
+
+.. code::
+
+    ovena stop
+    docker volume remove ovena_database-backup
+    docker volume remove ovena_orthanc-storage
+    ovena start
+
+
+Changing the IP address of the server itself
+--------------------------------------------
+
+This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.
+
