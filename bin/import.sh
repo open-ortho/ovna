@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# v0.3.0
+# v0.3.1
 #
 # Wrapper for ImportDicomFiles to run multiple imports at the same time.
 # The username here must be one present in the orthanc config JSON file.
