@@ -1,17 +1,70 @@
 #!/bin/sh
 #
-# Ovena helper tool v. 0.2.1-dev
+# Ovena helper tool v. 0.3.0
 #
 
-VERSION="0.2.1-dev"
+VERSION="0.3.0"
 DBNAME="$<DATABASE_NAME>"
 DBUSER="$<DATABASE_USERNAME>"
+ENV="$<OVENA_CONFIG>/ovena.env"
 alias _docker-compose="docker-compose -f $<OVENA_CONFIG>/docker-compose.yml"
-alias _exec="_docker-compose exec -T \"$<DATABASE_DOCKER_IMAGE>\""
+alias _exec="_docker-compose exec"
+alias _exec_db="_docker-compose exec -T \"$<DATABASE_DOCKER_IMAGE>\""
+
+if [ ! -r "${ENV}" ]; then
+    printf "ERROR: cannot read configuration file [%s]\n" "${ENV}"
+    exit 1
+fi
+
+set -a
+# shellcheck source=../dot-env
+. "${ENV}" || exit 1
+
+# Convert SMB server name to IP: for some reason hostname makes docker or docker-compose choke
+SMB_SERVER_IP=$(getent hosts "${SMB_SERVER}" | awk '{ print $1 }')
+export SMB_SERVER="${SMB_SERVER_IP}"
 
 # Reset all variables that might be set
 file=
 verbose=0 # Variables to be evaluated as shell arithmetic should be initialized to a default or validated beforehand.
+
+show_help() {
+    printf "
+Ovena v%s
+
+ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
+
+Options:
+    -h, --help          Print help screen and exit.
+    -V, --version       Print version and quit.
+    -f, --file=FILENAME Specify filename to backup to or to restore from.
+    -v, --verbose       Increase verbosity.
+
+Commands:
+    start:      Start up the ovena stack (DB, orthanc, proxy).
+
+    stop:       Shutdown the ovena stack (DB, orthanc, proxy).
+
+    reload:     Restart only Orthanc service. Use to reload config changes.
+
+    shell:      Launch a bash shell inside the Orthanc container.
+
+    logs:       Continuosly print Orthanc service logs.
+
+    backup:     Backup PostgreSQL database to <filename> in CIFS  
+                share defined in $<OVENA_CONFIG>/docker-compose.yml.
+
+    restore:    Restore PostgreSQL database from <filename> in CIFS share
+                defined in $<OVENA_CONFIG>/docker-compose.yml.
+
+    upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
+
+" "${VERSION}"
+}
+
+_log() {
+    printf " * %s\n" "$@"
+}
 
 while :; do
     case $1 in
@@ -56,75 +109,45 @@ while :; do
     shift
 done
 
-# if --file was provided, open it for writing, else duplicate stdout
-if [ -n "$file" ]; then
-    exec 3>"$file"
-else
-    exec 3>&1
-fi
-
-show_help() {
-    printf "
-Ovena v%s
-
-ovena [-f|--file <filename>][-h|--help][-v|--verbose] <command>
-
-Options:
-    -h, --help          Print help screen and exit.
-    -V, --version       Print version and quit.
-    -f, --file=FILENAME Specify filename to backup to or to restore from.
-    -v, --verbose       Increase verbosity.
-
-Commands:
-    start:      Start up the ovena stack (DB, orthanc, proxy).
-
-    stop:       Shutdown the ovena stack (DB, orthanc, proxy).
-
-    reload:     Restart only Orthanc service. Use to reload config changes.
-
-    logs:       Continuosly print Orthanc service logs.
-
-    backup:     Backup PostgreSQL database to <filename> in CIFS  
-                share defined in $<OVENA_CONFIG>/docker-compose.yml.
-
-    restore:    Restore PostgreSQL database from <filename> in CIFS share
-                defined in $<OVENA_CONFIG>/docker-compose.yml.
-
-    upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
-
-" "${VERSION}"
-}
-
 _restore() {
-    echo "Restoring from ${file}"
+    # If --file parameter starts with a slash, we are assuming the file is an absolute path and resides on the local file system.
+    # If the file does not start wwith a slash, we assume it's on the smb share.
+    _log "Restoring from ${file}"
     BKPFILE="${file}"
+    BKPFILE_NAME="$(basename "${BKPFILE}")"
+    BKPFILE_IN_CONTAINER="/mnt/backup/.backup.sql.gz"
     USEROPT="--username=${DBUSER}"
 
-    echo "Dropping DB VOLUME"
-    _docker-compose down
+    _log "Dropping DB VOLUME"
+    _docker-compose down || exit 1
     rm -rf /var/lib/docker/volumes/postgresql/*
 
-    echo "Starting DB and restoring."
-    _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" && sleep 5
-
+    _log "Starting DB and restoring."
+    _docker-compose up -d "$<DATABASE_DOCKER_IMAGE>" || exit 1
+    _log "Waiting for DB to start"
+    sleep 5
+    case "${file}" in /*)
+        if [ ! -r "${file}" ]; then printf "ERROR: No backup file [%s] was found.\n" "${file}" && exit 1; fi
+        _log "Copying backup inside container"
+        docker cp "${BKPFILE}" "ovena-postgres:${BKPFILE_IN_CONTAINER}" || exit 1
+    esac
     # DBUSER and DBNAME are created by default by the docker container
-    case ${file} in
+    case ${BKPFILE} in
     *.gz)
         UNCOMPRESSED="/mnt/backup/.backup.sql"
-        printf "Uncompressing backup... " &&
-            printf "zcat /mnt/backup/%s > %s\n" "${BKPFILE}" "${UNCOMPRESSED}" | _exec bash
-        echo "done."
+        printf " * Uncompressing backup... " &&
+            printf "zcat %s > %s\n" "${BKPFILE_IN_CONTAINER}" "${UNCOMPRESSED}" | _exec_db bash
+        printf "done.\n"
         ;;
     *.sql)
-        UNCOMPRESSED="/mnt/backup/${BKPFILE}"
-        echo "cp /mnt/backup/${BKPFILE} > ${UNCOMPRESSED}" | _exec bash
+        UNCOMPRESSED="${BKPFILE_IN_CONTAINER}"
         ;;
     esac
-    echo "Restoring backup" &&
-        _exec /usr/bin/psql -v ON_ERROR_STOP=1 ${USEROPT} --file="${UNCOMPRESSED}" &&
-        _exec rm "${UNCOMPRESSED}" &&
+    _log "Restoring backup" &&
+        _exec_db /usr/bin/psql -v ON_ERROR_STOP=1 ${USEROPT} --file="${UNCOMPRESSED}" &&
+        _exec_db rm -f "${UNCOMPRESSED}" "${BKPFILE_IN_CONTAINER}" &&
         _docker-compose up -d &&
-        echo "Restore completed."
+        _log "Restore completed."
 }
 
 _older_or_same_version_available() {
@@ -144,14 +167,14 @@ _upgrade() {
     _tmpdir="$(mktemp -d)"
     _tarball="$(mktemp)"
     # Download latest ovena package
-    curl -sL "https://api.github.com/repos/open-ortho/ovena/tarball" > "${_tarball}"
+    curl -sL "https://api.github.com/repos/open-ortho/ovena/tarball" >"${_tarball}"
 
     # Unpack and run install script
-    cd "${_tmpdir}" && \
-    tar zxvf "${_tarball}" && \
-    cd ovena && \
-    ./ovena-install.sh && \
-    echo "Upgrade Completed succesfully."
+    cd "${_tmpdir}" &&
+        tar zxvf "${_tarball}" &&
+        cd ovena &&
+        ./ovena-install.sh &&
+        _log "Upgrade Completed succesfully."
 }
 
 _backup() {
@@ -163,14 +186,14 @@ _backup() {
     printf "Backing up to %s... " "${DBDUMPFILE}"
     INPROGRESS="${DBDUMPFILE}.in-progress"
 
-    _exec /usr/bin/pg_dump \
+    _exec_db /usr/bin/pg_dump \
         --no-owner -U "${DBUSER}" "${DBNAME}" --file="${INPROGRESS}" || exit
 
-    _exec mv "${INPROGRESS}" "${DBDUMPFILE}" || exit
-    echo "done."
+    _exec_db mv "${INPROGRESS}" "${DBDUMPFILE}" || exit
+    _log "done."
     printf "Compressing... "
-    _exec gzip "${DBDUMPFILE}" || exit
-    echo "done."
+    _exec_db gzip "${DBDUMPFILE}" || exit
+    _log "done."
 }
 
 command="${1}"
@@ -189,6 +212,10 @@ reload)
     ;;
 logs)
     _docker-compose logs -f orthanc
+    exit
+    ;;
+shell)
+    _exec orthanc bash
     exit
     ;;
 backup)
