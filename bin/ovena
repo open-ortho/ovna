@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# Ovena helper tool v. 0.3.0-dev
+# Ovena helper tool v. 0.3.0
 #
 
-VERSION="0.3.0-dev"
+VERSION="0.3.0"
 DBNAME="$<DATABASE_NAME>"
 DBUSER="$<DATABASE_USERNAME>"
 ENV="$<OVENA_CONFIG>/ovena.env"

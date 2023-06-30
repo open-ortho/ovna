@@ -1,5 +1,5 @@
 {
-  "_version": "0.3.0-dev",
+  "_version": "0.3.0",
   "Name": "ovena",
   "DicomAet": "ovena",
   "StorageCompression": false,
