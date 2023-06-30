@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #
 # v0.3.1
@@ -25,10 +25,14 @@
 import os
 import sys
 import os.path
-import httplib2
+import requests
+from requests.auth import HTTPBasicAuth
+import logging
 import base64
+import json
+logging.basicConfig(level=logging.INFO)
 
-if len(sys.argv) != 4 and len(sys.argv) != 6:
+def print_help():
     print("""
 Sample script to recursively import in Orthanc all the DICOM files
 that are stored in some path. Please make sure that Orthanc is running
@@ -38,14 +42,39 @@ API.
 Usage: %s [hostname] [HTTP port] [path]
 Usage: %s [hostname] [HTTP port] [path] [username] [password]
 For instance: %s 127.0.0.1 8042 .
-""" % (sys.argv[0], sys.argv[0], sys.argv[0]))
+""" % (this_name, this_name, this_name))
+
+this_name = sys.argv[0]
+try:
+    arg_hostname = sys.argv[1]
+    arg_port = sys.argv[2]
+    arg_path = sys.argv[3]
+    arg_username = sys.argv[4]
+    arg_password = sys.argv[5]
+except:
+    print_help()
+
+if os.path.exists(arg_username):
+    # username is actually a path. Let's assume it is the orthanc.json file with username and password credentials.
+    
+
+    # Load username and password from first available registered user in orthanc.json file
+    with open (arg_username, 'r') as json_file:
+        global username,password
+        oc_cfg = json.load(json_file)
+        re = oc_cfg["RegisteredUsers"]
+        username = list(re.keys())[0]
+        password = re[username]
+        logging.info(f"Loaded username and password from {arg_username}")
+
+elif len(sys.argv) != 4 and len(sys.argv) != 6:
+    print_help()
     exit(-1)
 
-URL = 'http://%s:%d/instances' % (sys.argv[1], int(sys.argv[2]))
+URL = 'https://%s:%d/instances' % (arg_hostname, int(arg_port))
 
 success_count = 0
 total_file_count = 0
-
 
 # This function will upload a single file to Orthanc through the REST API
 def UploadFile(path):
@@ -58,15 +87,11 @@ def UploadFile(path):
     total_file_count += 1
 
     try:
-        sys.stdout.write("Importing %s" % path)
+        logging.info("Importing %s" % path)
 
-        h = httplib2.Http()
-
-        headers = {'content-type': 'application/dicom'}
+        auth = None
 
         if len(sys.argv) == 6:
-            username = sys.argv[4]
-            password = sys.argv[5]
 
             # h.add_credentials(username, password)
 
@@ -75,35 +100,40 @@ def UploadFile(path):
             # Authentication (for some weird reason, this method does
             # not always work)
             # http://en.wikipedia.org/wiki/Basic_access_authentication
-            creds_str = username + ':' + password
-            creds_str_bytes = creds_str.encode("ascii")
-            creds_str_bytes_b64 = b'Basic ' + base64.b64encode(creds_str_bytes)
-            headers['authorization'] = creds_str_bytes_b64.decode("ascii")
 
-        resp, content = h.request(URL, 'POST',
-                                  body=content,
-                                  headers=headers)
+            auth = HTTPBasicAuth(username,password)
 
-        if resp.status == 200:
-            sys.stdout.write(" => success\n")
+        headers = {'Content-Type': 'application/dicom'}
+        resp = requests.post(
+            URL,
+            auth=auth,
+            verify=True,
+            headers=headers,
+            data=content)
+
+        if resp.status_code == 200:
+            # print(json.dumps(json.loads(resp.content),indent=4))
+            jresp = json.loads(resp.content)
+            logging.info(jresp["Status"])
+            # logging.info(" => success\n")
             success_count += 1
         else:
-            sys.stdout.write(
-                " => failure (Is it a DICOM file? Is there a password?)\n")
+            logging.error(
+                f" => {resp.reason} (Is it a DICOM file? Is there a password?)\n")
 
     except:
         type, value, traceback = sys.exc_info()
-        sys.stderr.write(str(value))
-        sys.stdout.write(
+        logging.error(str(value))
+        logging.error(
             " => unable to connect (Is Orthanc running? Is there a password?)\n")
 
 
-if os.path.isfile(sys.argv[3]):
+if os.path.isfile(arg_path):
     # Upload a single file
-    UploadFile(sys.argv[3])
+    UploadFile(arg_path)
 else:
     # Recursively upload a directory
-    for root, dirs, files in os.walk(sys.argv[3]):
+    for root, dirs, files in os.walk(arg_path):
         for f in files:
             UploadFile(os.path.join(root, f))
 

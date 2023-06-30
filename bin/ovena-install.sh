@@ -6,7 +6,8 @@ This is Ovena Installer v 0.3.1
 *******************************
 
 "
-ENV="$<OVENA_CONFIG>/ovena.env"
+OVENA_CONFIG="$<OVENA_CONFIG>"
+ENV="${OVENA_CONFIG}/ovena.env"
 if [ -r "$ENV" ]; then
     set -a
     # shellcheck source=../dot-env
@@ -47,10 +48,10 @@ SMB_SHARE_DB_BACKUP=%s
 fi
 
 # If ovena is running, shut it down
-docker-compose -f "$<OVENA_CONFIG>/docker-compose.yml" stop 2>/dev/null
+docker-compose -f "${OVENA_CONFIG}/docker-compose.yml" stop 2>/dev/null
 
 echo "Create directories"
-mkdir -vp "$<OVENA_CONFIG>" /usr/local/bin || exit 1
+mkdir -vp "${OVENA_CONFIG}" /usr/local/bin || exit 1
 
 echo "Update and install packages"
 mkdir -p /tmp
@@ -64,23 +65,24 @@ curl -SL https://github.com/docker/compose/releases/download/v2.19.0/docker-comp
 chmod 755 /usr/local/bin/docker-compose
 
 echo "Copy configuration files"
-if [ ! -d "$<OVENA_CONFIG>/orthanc" ]; then
-    cp -vR docker/* "$<OVENA_CONFIG>" || exit 1
+if [ ! -d "${OVENA_CONFIG}/orthanc" ]; then
+    cp -vR docker/* "${OVENA_CONFIG}" || exit 1
 else
     echo "Found existing configuration. Will not overwrite with default config files."
     # Delete everything except the orthanc folder
-    # find "$<OVENA_CONFIG>/"* -name "orthanc" -prune -o -exec rm -rf {} \; 2> /dev/null
+    # find "${OVENA_CONFIG}/"* -name "orthanc" -prune -o -exec rm -rf {} \; 2> /dev/null
     # Copy everything except the orthanc folder
     pushd docker &&
-        find ./* -name "orthanc" -prune -o -exec cp -vR {} "$<OVENA_CONFIG>/{}" \; || exit 1
+        find ./* -name "orthanc" -prune -o -exec cp -vR {} "${OVENA_CONFIG}/{}" \; || exit 1
     popd || exit 1
 fi
-chmod 600 "$<OVENA_CONFIG>/orthanc/users.json" "$<OVENA_CONFIG>/docker-compose.yml" || exit 1
+chmod 600 "${OVENA_CONFIG}/orthanc/users.json" "${OVENA_CONFIG}/docker-compose.yml" || exit 1
 
 echo "Copy scripts in /usr/local/bin"
 rm -f /usr/local/bin/ovena*
 cp -vR bin/ovena* /usr/local/bin || exit 1
+echo "Install backup script in cron.hourly"
 mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 
-cd "$<OVENA_CONFIG>" && echo "Build docker" && docker-compose build &&
+cd "${OVENA_CONFIG}" && echo "Build docker" && docker-compose build &&
     /usr/local/bin/ovena start
