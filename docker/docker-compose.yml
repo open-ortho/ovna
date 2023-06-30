@@ -1,5 +1,5 @@
 #
-# open-ortho ovena v0.2.1
+# open-ortho ovena v0.3.0
 #
 version: "2"
 services:
@@ -15,20 +15,20 @@ services:
     ]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC_IP>80:80",
-      "$<ORTHANC_IP>443:443",
+      "${ORTHANC_IP}80:80",
+      "${ORTHANC_IP}443:443",
     ]
   orthanc:
-    image: osimis/orthanc
+    image: osimis/orthanc:23.6.0
     container_name: $<PROJECT_NAME>-orthanc
     depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
     ports: [
-      "$<ORTHANC_IP>104:4242"
+      "${ORTHANC_IP}104:4242"
       ]
     volumes: [
       orthanc-storage:/var/lib/orthanc/db:Z,
-      "$<OVENA_CONFIG>/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro"
+      "$<OVENA_CONFIG>/orthanc/:/etc/orthanc/:ro"
       ]
     environment: 
       VERBOSE_ENABLED: "false"
@@ -40,7 +40,7 @@ services:
 
 
   $<DATABASE_DOCKER_IMAGE>:
-    image: postgres
+    image: postgres:15
     container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
     volumes: [
@@ -56,13 +56,13 @@ volumes:
     driver: local
     driver_opts:
       type: cifs
-      device: //$<SMB_SERVER>/$<SMB_SHARE>
-      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+      device: //${SMB_SERVER}/${SMB_SHARE}
+      o: "username=${SMB_USER},password=${SMB_PASS}"
   $<DATABASE_DOCKER_IMAGE>-backup:
     driver: local
     driver_opts:
       type: cifs
-      device: //$<SMB_SERVER>/$<SMB_SHARE_DB_BACKUP>
-      o: "username=$<SMB_USER>,password=$<SMB_PASS>"
+      device: //${SMB_SERVER}/${SMB_SHARE_DB_BACKUP}
+      o: "username=${SMB_USER},password=${SMB_PASS}"
       # Unfortunately the credentials option doesn't work.
       # o: "credentials=$<OVENA_CONFIG>/smbcredentials"
