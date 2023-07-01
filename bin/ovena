@@ -7,6 +7,7 @@ VERSION="0.3.1"
 DBNAME="$<DATABASE_NAME>"
 DBUSER="$<DATABASE_USERNAME>"
 OVENA_CONFIG="$<OVENA_CONFIG>"
+OVENA_IMPORT="/usr/local/bin/ovena-ImportDicomFiles.py"
 ENV="${OVENA_CONFIG}/ovena.env"
 alias _docker-compose="docker-compose -f ${OVENA_CONFIG}/docker-compose.yml"
 alias _exec="_docker-compose exec"
@@ -28,6 +29,10 @@ export SMB_SERVER="${SMB_SERVER_IP}"
 # Reset all variables that might be set
 file=
 verbose=0 # Variables to be evaluated as shell arithmetic should be initialized to a default or validated beforehand.
+
+log() {
+    printf "INFO: %s" "$@"
+}
 
 show_help() {
     printf "
@@ -207,7 +212,8 @@ _import() {
         exit 1
     fi
     VOLUMI="${file}"
-    LOG="/var/log/ovena_import.log"
+    LOGDIR="/var/log/ovena-import"
+    mkdir -p "${LOGDIR}"
     ORTHANC_IP=$(printf "%s" $ORTHANC_IP | sed 's/://')
     ORTHANC_PORT="443"
 
@@ -215,7 +221,7 @@ _import() {
     for folder in $(find "${VOLUMI}" -type d -maxdepth 1); do
         DIR=$(basename "${folder}")
         printf "Launching import of %s..." "${folder}"
-        ./ImportDicomFiles.py "${ORTHANC_IP}" "${ORTHANC_PORT}" "${folder}" "${OVENA_CONFIG}/orthanc/users.json" >>"${LOG}/${DIR}_import.log" &
+        ${OVENA_IMPORT} "${ORTHANC_IP}" "${ORTHANC_PORT}" "${folder}" "${OVENA_CONFIG}/orthanc/users.json" "" >>"${LOGDIR}/${DIR}_import.log" &
         echo "done."
     done
 

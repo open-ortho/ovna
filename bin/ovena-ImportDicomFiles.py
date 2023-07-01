@@ -75,9 +75,11 @@ URL = 'https://%s:%d/instances' % (arg_hostname, int(arg_port))
 
 success_count = 0
 total_file_count = 0
+already_stored_count= 0
 
 # This function will upload a single file to Orthanc through the REST API
 def UploadFile(path):
+    global already_stored_count
     global success_count
     global total_file_count
 
@@ -92,15 +94,6 @@ def UploadFile(path):
         auth = None
 
         if len(sys.argv) == 6:
-
-            # h.add_credentials(username, password)
-
-            # This is a custom reimplementation of the
-            # "Http.add_credentials()" method for Basic HTTP Access
-            # Authentication (for some weird reason, this method does
-            # not always work)
-            # http://en.wikipedia.org/wiki/Basic_access_authentication
-
             auth = HTTPBasicAuth(username,password)
 
         headers = {'Content-Type': 'application/dicom'}
@@ -116,16 +109,18 @@ def UploadFile(path):
             jresp = json.loads(resp.content)
             logging.info(jresp["Status"])
             # logging.info(" => success\n")
-            success_count += 1
+            if "Success" in jresp["Status"]:
+                success_count += 1
+            elif "AlreadyStored" in jresp["Status"]:
+                already_stored_count += 1
+                
         else:
             logging.error(
-                f" => {resp.reason} (Is it a DICOM file? Is there a password?)\n")
+                f" => {resp.reason} (Is it a DICOM file? Is there a password?)")
 
-    except:
-        type, value, traceback = sys.exc_info()
-        logging.error(str(value))
-        logging.error(
-            " => unable to connect (Is Orthanc running? Is there a password?)\n")
+    except Exception as e:
+        logging.exception(
+            " => unable to connect (Is Orthanc running? Is there a password?)")
 
 
 if os.path.isfile(arg_path):
@@ -137,9 +132,9 @@ else:
         for f in files:
             UploadFile(os.path.join(root, f))
 
-if success_count == total_file_count:
-    print("\nSummary: all %d DICOM file(s) have been imported successfully" %
-          success_count)
+total_ok_count = already_stored_count + success_count
+if total_ok_count == total_file_count:
+    print(f"\nSummary: all {total_ok_count} DICOM file(s) have been imported successfully.\n{already_stored_count} were already stored, and {success_count} were added.")
 else:
     print("\nSummary: %d out of %d files have been imported successfully as DICOM instances" % (
-        success_count, total_file_count))
+        total_ok_count, total_file_count))
