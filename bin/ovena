@@ -55,7 +55,7 @@ Commands:
 
     shell:      Launch a bash shell inside the Orthanc container.
 
-    logs:       Continuosly print Orthanc service logs.
+    logs:       Continuosly print service logs from all containers.
 
     import:     Import DICOM files insided the folder specified in --file 
                 into Orthanc.
@@ -242,7 +242,7 @@ reload)
     exit
     ;;
 logs)
-    _docker-compose logs -f orthanc
+    _docker-compose logs -f 
     exit
     ;;
 shell)
