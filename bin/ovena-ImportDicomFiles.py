@@ -27,10 +27,15 @@ import sys
 import os.path
 import requests
 from requests.auth import HTTPBasicAuth
+import random
+from multiprocessing import Pool
 import logging
 import base64
 import json
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='/var/log/ovena-ImportDicomFiles.log',level=logging.INFO)
+
+# Number of simultaneous imports to run
+PROCESSES = 16
 
 def print_help():
     print("""
@@ -71,7 +76,7 @@ elif len(sys.argv) != 4 and len(sys.argv) != 6:
     print_help()
     exit(-1)
 
-URL = 'https://%s:%d/instances' % (arg_hostname, int(arg_port))
+URL = 'http://%s:%d/instances' % (arg_hostname, int(arg_port))
 
 success_count = 0
 total_file_count = 0
@@ -83,9 +88,8 @@ def UploadFile(path):
     global success_count
     global total_file_count
 
-    f = open(path, "rb")
-    content = f.read()
-    f.close()
+    with open(path, "rb") as f:
+        content = f.read()
     total_file_count += 1
 
     try:
@@ -93,7 +97,7 @@ def UploadFile(path):
 
         auth = None
 
-        if len(sys.argv) == 6:
+        if len(arg_username) > 0 and len(arg_password) > 0:
             auth = HTTPBasicAuth(username,password)
 
         headers = {'Content-Type': 'application/dicom'}
@@ -107,8 +111,7 @@ def UploadFile(path):
         if resp.status_code == 200:
             # print(json.dumps(json.loads(resp.content),indent=4))
             jresp = json.loads(resp.content)
-            logging.info(jresp["Status"])
-            # logging.info(" => success\n")
+            logging.warning(f"{jresp['Status']}: {path}")
             if "Success" in jresp["Status"]:
                 success_count += 1
             elif "AlreadyStored" in jresp["Status"]:
@@ -122,15 +125,42 @@ def UploadFile(path):
         logging.exception(
             " => unable to connect (Is Orthanc running? Is there a password?)")
 
+def UploadFiles(root,path_list):
+    ''' Upload a list of files '''
+    for file in path_list:
+        UploadFile(os.path.join(root,file))
+
 
 if os.path.isfile(arg_path):
     # Upload a single file
     UploadFile(arg_path)
 else:
     # Recursively upload a directory
-    for root, dirs, files in os.walk(arg_path):
-        for f in files:
-            UploadFile(os.path.join(root, f))
+    processes = []
+    file_list = []
+    logging.info("Scanning files...")
+    pool = Pool(PROCESSES)
+    for root, dirs, files in (os.walk(arg_path)):
+        for file in files:
+            filename = os.path.join(root,file)
+            pool.apply_async(UploadFile,args=(filename,))
+
+    pool.close()
+    pool.join()
+
+    # logging.info(f"Found {len(file_list)} files. Randomizing file list.")
+    # random.shuffle(file_list)
+
+    # logging.info(f"Launching {PROCESSES} processes.")
+    # n = len(file_list) // PROCESSES
+    # for chunks in [file_list[i:i+n] for i in range(0, len(file_list), n)]:
+    #     for chunk in chunks:
+    #         process = multiprocessing.Process(target=UploadFiles,args=(root,chunk))
+    #         process.start()
+    #         processes.append(process)
+
+    # for process in processes:
+    #     process.join()
 
 total_ok_count = already_stored_count + success_count
 if total_ok_count == total_file_count:
