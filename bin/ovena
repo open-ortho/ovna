@@ -211,19 +211,13 @@ _import() {
         log "ERROR: You must specify an input folder using the --file paramenter"
         exit 1
     fi
-    VOLUMI="${file}"
     LOGDIR="/var/log/ovena-import"
     mkdir -p "${LOGDIR}"
     ORTHANC_IP=$(printf "%s" $ORTHANC_IP | sed 's/://')
     ORTHANC_PORT="443"
 
     # Launch a separate import process for every first level folder.
-    for folder in $(find "${VOLUMI}" -type d -maxdepth 1); do
-        DIR=$(basename "${folder}")
-        printf "Launching import of %s..." "${folder}"
-        ${OVENA_IMPORT} "${ORTHANC_IP}" "${ORTHANC_PORT}" "${folder}" "${OVENA_CONFIG}/orthanc/users.json" "" >>"${LOGDIR}/${DIR}_import.log" &
-        echo "done."
-    done
+    ${OVENA_IMPORT} "${ORTHANC_IP}" "${ORTHANC_PORT}" "${file}" "${OVENA_CONFIG}/orthanc/users.json" "" >>"${LOGDIR}/${DIR}_import.log" &
 
 }
 
