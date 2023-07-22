@@ -11,7 +11,7 @@ There are two configurations:
 
 Must have a minimum configuration of:
 
-.. code:;
+.. code::
 
     # IP address to use for the Orthanc PACS. End with ":"
     ORTHANC_IP=X.X.X.X:
