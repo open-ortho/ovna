@@ -74,6 +74,7 @@ Credentials and other database related configuration.
 - ...
 
 ``modalities.json``
+^^^^^^^^^^^^^^^^^^^
 
 DICOM modalities allowed to recieve from and which show up in the explorer as available for sending.
 
@@ -84,6 +85,8 @@ DICOM modalities allowed to recieve from and which show up in the explorer as av
   - PORT
 
 ``explorer2.json``
+^^^^^^^^^^^^^^^^^^
+
 
 The new Orthanc explorer interface. Contains many options. Main things here:
 
@@ -96,6 +99,50 @@ The new Orthanc explorer interface. Contains many options. Main things here:
 - Deleting resources on/off
 
 ``dicomweb.json``
+^^^^^^^^^^^^^^^^^
+
+``housekeeper.json``
+^^^^^^^^^^^^^^^^^^^^
+
+Clean up, housekeeping tasks.
+
+- Enable on/off
+- Triggers to configure to start them
+- Forcing a start
+- What to do
+
+
+.. _extra_main_dicom_tags:
+
+``ExtraMainDicomTags.json``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Orthanc allows the configuration of extra DICOM tags to be indexed in its database. These tags are specified using the `ExtraMainDicomTags` configuration option. By default, Orthanc indexes a limited set of DICOM tags. However, you can extend this set by adding more tags to the `ExtraMainDicomTags` list.
+
+Here is how you can configure `ExtraMainDicomTags` in Orthanc's configuration file:
+
+.. code-block:: json
+
+    {
+        "ExtraMainDicomTags" : [
+            "0010,0020",  # Patient ID
+            "0008,1030",  # Study Description
+            "0010,0010"   # Patient Name
+        ]
+    }
+
+Description of `ExtraMainDicomTags` configuration:
+
+- **0010,0020 (Patient ID)**: This tag represents the unique identifier assigned to the patient.
+- **0008,1030 (Study Description)**: This tag provides a description of the study.
+- **0010,0010 (Patient Name)**: This tag represents the name of the patient.
+
+Adding these tags to `ExtraMainDicomTags` will make them available for querying through Orthanc's REST API, making it easier to filter and search DICOM objects based on these additional attributes.
+acomTags`, update the configuration file (`orthanc.json`) accordingly and restart the Orthanc service to apply the changes.
+
+For more information on configuring Orthanc, please refer to the official Orthanc documentation.
+
+
 
 Docker Configuration
 --------------------

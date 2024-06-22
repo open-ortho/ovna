@@ -111,7 +111,9 @@
 <li><p>Connection Count Limitation</p></li>
 <li><p>…</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></p>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code><a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
 <p>DICOM modalities allowed to recieve from and which show up in the explorer as available for sending.</p>
 <ul class="simple">
 <li><p>List of</p>
@@ -122,7 +124,9 @@
 </ul>
 </li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">explorer2.json</span></code></p>
+</section>
+<section id="explorer2-json">
+<h3><code class="docutils literal notranslate"><span class="pre">explorer2.json</span></code><a class="headerlink" href="#explorer2-json" title="Permalink to this heading">¶</a></h3>
 <p>The new Orthanc explorer interface. Contains many options. Main things here:</p>
 <ul class="simple">
 <li><p>The URL path of the UI.</p></li>
@@ -133,7 +137,42 @@
 <li><p>Enabling Settings</p></li>
 <li><p>Deleting resources on/off</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">dicomweb.json</span></code></p>
+</section>
+<section id="dicomweb-json">
+<h3><code class="docutils literal notranslate"><span class="pre">dicomweb.json</span></code><a class="headerlink" href="#dicomweb-json" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="housekeeper-json">
+<h3><code class="docutils literal notranslate"><span class="pre">housekeeper.json</span></code><a class="headerlink" href="#housekeeper-json" title="Permalink to this heading">¶</a></h3>
+<p>Clean up, housekeeping tasks.</p>
+<ul class="simple">
+<li><p>Enable on/off</p></li>
+<li><p>Triggers to configure to start them</p></li>
+<li><p>Forcing a start</p></li>
+<li><p>What to do</p></li>
+</ul>
+</section>
+<section id="extramaindicomtags-json">
+<span id="extra-main-dicom-tags"></span><h3><code class="docutils literal notranslate"><span class="pre">ExtraMainDicomTags.json</span></code><a class="headerlink" href="#extramaindicomtags-json" title="Permalink to this heading">¶</a></h3>
+<p>Orthanc allows the configuration of extra DICOM tags to be indexed in its database. These tags are specified using the <cite>ExtraMainDicomTags</cite> configuration option. By default, Orthanc indexes a limited set of DICOM tags. However, you can extend this set by adding more tags to the <cite>ExtraMainDicomTags</cite> list.</p>
+<p>Here is how you can configure <cite>ExtraMainDicomTags</cite> in Orthanc’s configuration file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+    &quot;ExtraMainDicomTags&quot; : [
+        &quot;0010,0020&quot;,  # Patient ID
+        &quot;0008,1030&quot;,  # Study Description
+        &quot;0010,0010&quot;   # Patient Name
+    ]
+}
+</pre></div>
+</div>
+<p>Description of <cite>ExtraMainDicomTags</cite> configuration:</p>
+<ul class="simple">
+<li><p><strong>0010,0020 (Patient ID)</strong>: This tag represents the unique identifier assigned to the patient.</p></li>
+<li><p><strong>0008,1030 (Study Description)</strong>: This tag provides a description of the study.</p></li>
+<li><p><strong>0010,0010 (Patient Name)</strong>: This tag represents the name of the patient.</p></li>
+</ul>
+<p>Adding these tags to <cite>ExtraMainDicomTags</cite> will make them available for querying through Orthanc’s REST API, making it easier to filter and search DICOM objects based on these additional attributes.
+acomTags`, update the configuration file (<cite>orthanc.json</cite>) accordingly and restart the Orthanc service to apply the changes.</p>
+<p>For more information on configuring Orthanc, please refer to the official Orthanc documentation.</p>
 </section>
 </section>
 <section id="docker-configuration">
@@ -186,6 +225,11 @@
 <li><a class="reference internal" href="#users-json"><code class="docutils literal notranslate"><span class="pre">users.json</span></code></a></li>
 <li><a class="reference internal" href="#modalities-json"><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></a></li>
 <li><a class="reference internal" href="#postgresql-json"><code class="docutils literal notranslate"><span class="pre">postgresql.json</span></code></a></li>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></a></li>
+<li><a class="reference internal" href="#explorer2-json"><code class="docutils literal notranslate"><span class="pre">explorer2.json</span></code></a></li>
+<li><a class="reference internal" href="#dicomweb-json"><code class="docutils literal notranslate"><span class="pre">dicomweb.json</span></code></a></li>
+<li><a class="reference internal" href="#housekeeper-json"><code class="docutils literal notranslate"><span class="pre">housekeeper.json</span></code></a></li>
+<li><a class="reference internal" href="#extramaindicomtags-json"><code class="docutils literal notranslate"><span class="pre">ExtraMainDicomTags.json</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#docker-configuration">Docker Configuration</a></li>
