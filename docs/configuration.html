@@ -1,17 +1,20 @@
+
 <!DOCTYPE html>
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Configuration changes &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -50,6 +53,18 @@
 <section id="ovena-env">
 <h2><code class="docutils literal notranslate"><span class="pre">ovena.env</span></code><a class="headerlink" href="#ovena-env" title="Permalink to this heading">¶</a></h2>
 <p>Must have a minimum configuration of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># IP address to use for the Orthanc PACS. End with &quot;:&quot;</span>
+<span class="n">ORTHANC_IP</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="p">:</span>
+
+<span class="c1"># Credentials to mount remote SMB share for remote image storage</span>
+<span class="n">SMB_USER</span><span class="o">=&lt;</span><span class="n">username</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">share</span><span class="o">&gt;</span>
+<span class="n">SMB_PASS</span><span class="o">=&lt;</span><span class="n">clear</span> <span class="n">text</span> <span class="n">password</span><span class="o">&gt;</span>
+<span class="n">SMB_DOMAIN</span><span class="o">=</span><span class="n">WORKGROUP</span>
+<span class="n">SMB_SERVER</span><span class="o">=&lt;</span><span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">server</span><span class="o">&gt;</span>
+<span class="n">SMB_SHARE</span><span class="o">=&lt;</span><span class="n">Name</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">Share</span><span class="o">&gt;</span>
+<span class="n">SMB_SHARE_DB_BACKUP</span><span class="o">=&lt;</span><span class="n">Name</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">Share</span> <span class="k">for</span> <span class="n">database</span> <span class="n">dumps</span><span class="o">&gt;</span>
+</pre></div>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Docker CIFS volumes don’t work well with hostnames! Use IP addresses.</p>
@@ -57,14 +72,84 @@
 </section>
 <section id="json-files">
 <h2><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files<a class="headerlink" href="#json-files" title="Permalink to this heading">¶</a></h2>
+<section id="orthanc-json">
+<h3><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code><a class="headerlink" href="#orthanc-json" title="Permalink to this heading">¶</a></h3>
+<p>Basic Orthanc configuration, such as DICOM AET, port, etc. This is the main orthanc configuration file. Things here:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code>: basic Orthanc configuration, such as DICOM AET, port, etc.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">users.json</span></code>: usernames and passwords for the WADO, Dicomweb and configuration interfaces.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code>: this is where the DICOM “clients” need to reside for the traditional DIMSE protocol</p></li>
+<li><p>DICOM AET</p></li>
+<li><p>Name of server</p></li>
+<li><p>compression</p></li>
+<li><p>Find result limits</p></li>
+<li><p>DicomEcho on/off</p></li>
+<li><p>Store on/off</p></li>
+<li><p>Remote Access on/off</p></li>
+<li><p>Authentication on/off</p></li>
+<li><p>Tcp Delay</p></li>
+<li><p>KeepAlive</p></li>
+<li><p>…</p></li>
 </ul>
+</section>
+<section id="users-json">
+<h3><code class="docutils literal notranslate"><span class="pre">users.json</span></code><a class="headerlink" href="#users-json" title="Permalink to this heading">¶</a></h3>
+<p>usernames and passwords for the WADO, Dicomweb and configuration interfaces. This is where all users are stored for DICOMweb and WADO, and access to GUI.</p>
+<ul class="simple">
+<li><p>usernames</p></li>
+<li><p>passwords in clear text.</p></li>
+</ul>
+</section>
+<section id="modalities-json">
+<h3><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code><a class="headerlink" href="#modalities-json" title="Permalink to this heading">¶</a></h3>
+<p>This is where the DICOM “clients” need to reside for the traditional DIMSE protocol</p>
 <p>For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc’s live configuration ability via API.</p>
+</section>
+<section id="postgresql-json">
+<h3><code class="docutils literal notranslate"><span class="pre">postgresql.json</span></code><a class="headerlink" href="#postgresql-json" title="Permalink to this heading">¶</a></h3>
+<p>Credentials and other database related configuration.</p>
+<ul class="simple">
+<li><p>DB Host, database, username and password</p></li>
+<li><p>Indexing on/off</p></li>
+<li><p>Connection Count Limitation</p></li>
+<li><p>…</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></p>
+<p>DICOM modalities allowed to recieve from and which show up in the explorer as available for sending.</p>
+<ul class="simple">
+<li><p>List of</p>
+<ul>
+<li><p>AET</p></li>
+<li><p>IP</p></li>
+<li><p>PORT</p></li>
+</ul>
+</li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">explorer2.json</span></code></p>
+<p>The new Orthanc explorer interface. Contains many options. Main things here:</p>
+<ul class="simple">
+<li><p>The URL path of the UI.</p></li>
+<li><p>Which DICOM tags to enable</p></li>
+<li><p>Which DICOM Modalities to show</p></li>
+<li><p>What Viewer Icons to show for which viewer</p></li>
+<li><p>The ordering of the viewers</p></li>
+<li><p>Enabling Settings</p></li>
+<li><p>Deleting resources on/off</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">dicomweb.json</span></code></p>
+</section>
+</section>
+<section id="docker-configuration">
+<h2>Docker Configuration<a class="headerlink" href="#docker-configuration" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code></p>
+<ul class="simple">
+<li><p>IP addresses to expose and map</p></li>
+<li><p>Location of files</p></li>
+<li><p>Location of DB</p></li>
+<li><p>Database Version</p></li>
+<li><p>Date format for Stone Web Viewer</p></li>
+<li><p>Enabling/disbling of Orthanc plugins</p></li>
+<li><p>Location of backups</p></li>
+</ul>
 <p>You can restart just the Orthanc container using:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ovena<span class="w"> </span>reload
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ovena reload
 </pre></div>
 </div>
 </section>
@@ -96,7 +181,14 @@
     <ul>
 <li><a class="reference internal" href="#">Configuration changes</a><ul>
 <li><a class="reference internal" href="#ovena-env"><code class="docutils literal notranslate"><span class="pre">ovena.env</span></code></a></li>
-<li><a class="reference internal" href="#json-files"><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files</a></li>
+<li><a class="reference internal" href="#json-files"><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files</a><ul>
+<li><a class="reference internal" href="#orthanc-json"><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code></a></li>
+<li><a class="reference internal" href="#users-json"><code class="docutils literal notranslate"><span class="pre">users.json</span></code></a></li>
+<li><a class="reference internal" href="#modalities-json"><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></a></li>
+<li><a class="reference internal" href="#postgresql-json"><code class="docutils literal notranslate"><span class="pre">postgresql.json</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#docker-configuration">Docker Configuration</a></li>
 <li><a class="reference internal" href="#changing-ip-address-of-smb-server">Changing IP address of SMB_SERVER</a></li>
 <li><a class="reference internal" href="#changing-the-ip-address-of-the-server-itself">Changing the IP address of the server itself</a></li>
 </ul>
@@ -153,7 +245,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, open-ortho.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
     </div>
   </body>
 </html>

@@ -11,7 +11,7 @@ There are two configurations:
 
 Must have a minimum configuration of:
 
-.. code:;
+.. code::
 
     # IP address to use for the Orthanc PACS. End with ":"
     ORTHANC_IP=X.X.X.X:
@@ -32,11 +32,84 @@ Must have a minimum configuration of:
 ``*.json`` files
 --------------------
 
-- ``orthanc.json``: basic Orthanc configuration, such as DICOM AET, port, etc.
-- ``users.json``: usernames and passwords for the WADO, Dicomweb and configuration interfaces.
-- ``modalities.json``: this is where the DICOM "clients" need to reside for the traditional DIMSE protocol
+``orthanc.json``
+^^^^^^^^^^^^^^^^^
+Basic Orthanc configuration, such as DICOM AET, port, etc. This is the main orthanc configuration file. Things here:
+
+- DICOM AET
+- Name of server
+- compression
+- Find result limits
+- DicomEcho on/off
+- Store on/off
+- Remote Access on/off
+- Authentication on/off
+- Tcp Delay
+- KeepAlive
+- ...
+
+``users.json``
+^^^^^^^^^^^^^^^
+usernames and passwords for the WADO, Dicomweb and configuration interfaces. This is where all users are stored for DICOMweb and WADO, and access to GUI.
+
+- usernames
+- passwords in clear text.
+
+
+``modalities.json``
+^^^^^^^^^^^^^^^^^^^
+
+This is where the DICOM "clients" need to reside for the traditional DIMSE protocol
 
 For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc's live configuration ability via API.
+
+``postgresql.json`` 
+^^^^^^^^^^^^^^^^^^^
+
+Credentials and other database related configuration.
+
+- DB Host, database, username and password
+- Indexing on/off
+- Connection Count Limitation
+- ...
+
+``modalities.json``
+
+DICOM modalities allowed to recieve from and which show up in the explorer as available for sending.
+
+- List of
+
+  - AET
+  - IP
+  - PORT
+
+``explorer2.json``
+
+The new Orthanc explorer interface. Contains many options. Main things here:
+
+- The URL path of the UI.
+- Which DICOM tags to enable
+- Which DICOM Modalities to show
+- What Viewer Icons to show for which viewer
+- The ordering of the viewers
+- Enabling Settings
+- Deleting resources on/off
+
+``dicomweb.json``
+
+Docker Configuration
+--------------------
+
+
+``docker-compose.yml``
+
+- IP addresses to expose and map
+- Location of files
+- Location of DB
+- Database Version
+- Date format for Stone Web Viewer
+- Enabling/disbling of Orthanc plugins
+- Location of backups
 
 You can restart just the Orthanc container using:
 
