@@ -57,5 +57,7 @@ cp -vR bin/ovena* /usr/local/bin || exit 1
 echo "Install backup script in cron.hourly"
 mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 
+ln -s /var/lib/docker /docker
+
 cd "${OVENA_CONFIG}" && echo "Build docker" && docker-compose build &&
     /usr/local/bin/ovena start
