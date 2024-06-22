@@ -1,0 +1,29 @@
+{
+    "ExtraMainDicomTags" : {
+    "Instance" : [
+        "Rows",
+        "Columns",
+        "ImageType",
+        "SOPClassUID",
+        "ContentDate",
+        "ContentTime",
+        "FrameOfReferenceUID",
+        "PixelSpacing",
+        "SpecificCharacterSet",
+        "BitsAllocated",
+        "BitsStored"
+    ],
+    "Series" : [
+        "TimezoneOffsetFromUTC",
+        "PerformedProcedureStepStartDate",
+        "PerformedProcedureStepStartTime",
+        "PerformingPhysicianName",
+        "RequestAttributesSequence"
+    ],
+    "Study": [
+        "SpecificCharacterSet",
+        "TimezoneOffsetFromUTC"
+    ],
+    "Patient": []
+    }
+}
