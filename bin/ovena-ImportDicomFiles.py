@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 #
-# v0.4.0
+# v0.4.1
 #
 # Orthanc - A Lightweight, RESTful DICOM Store
 # Copyright (C) 2012-2016 Sebastien Jodogne, Medical Physics
