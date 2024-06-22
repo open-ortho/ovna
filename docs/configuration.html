@@ -55,14 +55,6 @@
 <p>Must have a minimum configuration of:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># IP address to use for the Orthanc PACS. End with &quot;:&quot;</span>
 <span class="n">ORTHANC_IP</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="p">:</span>
-
-<span class="c1"># Credentials to mount remote SMB share for remote image storage</span>
-<span class="n">SMB_USER</span><span class="o">=&lt;</span><span class="n">username</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">share</span><span class="o">&gt;</span>
-<span class="n">SMB_PASS</span><span class="o">=&lt;</span><span class="n">clear</span> <span class="n">text</span> <span class="n">password</span><span class="o">&gt;</span>
-<span class="n">SMB_DOMAIN</span><span class="o">=</span><span class="n">WORKGROUP</span>
-<span class="n">SMB_SERVER</span><span class="o">=&lt;</span><span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">server</span><span class="o">&gt;</span>
-<span class="n">SMB_SHARE</span><span class="o">=&lt;</span><span class="n">Name</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">Share</span><span class="o">&gt;</span>
-<span class="n">SMB_SHARE_DB_BACKUP</span><span class="o">=&lt;</span><span class="n">Name</span> <span class="n">of</span> <span class="n">SMB</span> <span class="n">Share</span> <span class="k">for</span> <span class="n">database</span> <span class="n">dumps</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -192,16 +184,6 @@ acomTags`, update the configuration file (<cite>orthanc.json</cite>) accordingly
 </pre></div>
 </div>
 </section>
-<section id="changing-ip-address-of-smb-server">
-<h2>Changing IP address of SMB_SERVER<a class="headerlink" href="#changing-ip-address-of-smb-server" title="Permalink to this heading">¶</a></h2>
-<p>If you have to change the IP address of the SMB_SERVER, you will have to recreate the docker volume:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ovena</span> <span class="n">stop</span>
-<span class="n">docker</span> <span class="n">volume</span> <span class="n">remove</span> <span class="n">ovena_database</span><span class="o">-</span><span class="n">backup</span>
-<span class="n">docker</span> <span class="n">volume</span> <span class="n">remove</span> <span class="n">ovena_orthanc</span><span class="o">-</span><span class="n">storage</span>
-<span class="n">ovena</span> <span class="n">start</span>
-</pre></div>
-</div>
-</section>
 <section id="changing-the-ip-address-of-the-server-itself">
 <h2>Changing the IP address of the server itself<a class="headerlink" href="#changing-the-ip-address-of-the-server-itself" title="Permalink to this heading">¶</a></h2>
 <p>This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.</p>
@@ -233,7 +215,6 @@ acomTags`, update the configuration file (<cite>orthanc.json</cite>) accordingly
 </ul>
 </li>
 <li><a class="reference internal" href="#docker-configuration">Docker Configuration</a></li>
-<li><a class="reference internal" href="#changing-ip-address-of-smb-server">Changing IP address of SMB_SERVER</a></li>
 <li><a class="reference internal" href="#changing-the-ip-address-of-the-server-itself">Changing the IP address of the server itself</a></li>
 </ul>
 </li>

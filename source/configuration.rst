@@ -16,14 +16,6 @@ Must have a minimum configuration of:
     # IP address to use for the Orthanc PACS. End with ":"
     ORTHANC_IP=X.X.X.X:
 
-    # Credentials to mount remote SMB share for remote image storage
-    SMB_USER=<username of SMB share>
-    SMB_PASS=<clear text password>
-    SMB_DOMAIN=WORKGROUP
-    SMB_SERVER=<IP address of SMB server>
-    SMB_SHARE=<Name of SMB Share>
-    SMB_SHARE_DB_BACKUP=<Name of SMB Share for database dumps>
-
 
 .. warning::
 
@@ -163,18 +155,6 @@ You can restart just the Orthanc container using:
 .. code:: shell
 
     ovena reload
-
-Changing IP address of SMB_SERVER
----------------------------------
-
-If you have to change the IP address of the SMB_SERVER, you will have to recreate the docker volume:
-
-.. code::
-
-    ovena stop
-    docker volume remove ovena_database-backup
-    docker volume remove ovena_orthanc-storage
-    ovena start
 
 
 Changing the IP address of the server itself
