@@ -20,6 +20,11 @@ else
     chmod 600 "${ENV}"
 fi
 
+# The following are unmutable paths, according to the documentation. Do not change.
+OVENA_DATABASE_LIVE="/var/lib/docker/volumes/ovena/database"
+OVENA_DATABASE_BACKUP="/var/lib/docker/volumes/ovena/database-backup"
+OVENA_ORTHANC_DATA="/var/lib/docker/volumes/ovena/orthanc/data"
+
 # If ovena is running, shut it down
 docker-compose -f "${OVENA_CONFIG}/docker-compose.yml" stop 2>/dev/null
 
@@ -57,7 +62,13 @@ cp -vR bin/ovena* /usr/local/bin || exit 1
 echo "Install backup script in cron.hourly"
 mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 
+echo "Link /var/lib/docker to /docker"
 ln -s /var/lib/docker /docker
+
+echo "Generate empty directories for data and backups if they don't exist"
+mkdir -p $OVENA_ORTHANC_DATA
+mkdir -p $OVENA_DATABASE_LIVE
+mkdir -p $OVENA_DATABASE_BACKUP
 
 cd "${OVENA_CONFIG}" && echo "Build docker" && docker-compose build &&
     /usr/local/bin/ovena start
