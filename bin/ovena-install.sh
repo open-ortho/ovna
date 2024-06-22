@@ -64,7 +64,7 @@ echo "Install backup script in cron.hourly"
 mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 
 echo "Link /var/lib/docker to /docker"
-ln -s /var/lib/docker /docker
+ln -s /var/lib/docker /docker 2> /dev/null
 
 echo "Generate empty directories for data and backups if they don't exist"
 mkdir -p $OVENA_ORTHANC_DATA
