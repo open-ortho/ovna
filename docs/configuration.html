@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modifiche &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
+    <title>Configuration changes &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -18,7 +18,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Prima installazione" href="installation.html" /> 
+    <link rel="next" title="How to Upgrade" href="upgrade.html" />
+    <link rel="prev" title="First Installation" href="installation.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -27,10 +28,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="installation.html" title="Prima installazione"
+          <a href="upgrade.html" title="How to Upgrade"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="First Installation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modifiche</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration changes</a></li> 
       </ul>
     </div>  
 
@@ -39,20 +43,150 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="modifiche">
-<h1>Modifiche<a class="headerlink" href="#modifiche" title="Permalink to this heading">¶</a></h1>
-<p>Le configurazioni si trovano in</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span><span class="o">/</span><span class="n">postgresql</span>
+  <section id="configuration-changes">
+<h1>Configuration changes<a class="headerlink" href="#configuration-changes" title="Permalink to this heading">¶</a></h1>
+<p>There are two configurations:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/etc/ovena/ovena.env</span></code>: for credentials and IP addresses</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/etc/ovena/orthanc/*.json</span></code>: for all things DICOM and Orthanc</p></li>
+</ul>
+<section id="ovena-env">
+<h2><code class="docutils literal notranslate"><span class="pre">ovena.env</span></code><a class="headerlink" href="#ovena-env" title="Permalink to this heading">¶</a></h2>
+<p>Must have a minimum configuration of:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># IP address to use for the Orthanc PACS. End with &quot;:&quot;</span>
+<span class="n">ORTHANC_IP</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">X</span><span class="p">:</span>
 </pre></div>
 </div>
-<section id="configurazione-dei-client">
-<h2>Configurazione dei client<a class="headerlink" href="#configurazione-dei-client" title="Permalink to this heading">¶</a></h2>
-<p>Per le Query Retrieve tradizionali, bisogna configurare ogni client con
-indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
-<p>Per aggiungere/rimuovere/modificare, si trova tutto in</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">orthanc</span><span class="o">.</span><span class="n">json</span>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Docker CIFS volumes don’t work well with hostnames! Use IP addresses.</p>
+</div>
+</section>
+<section id="json-files">
+<h2><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files<a class="headerlink" href="#json-files" title="Permalink to this heading">¶</a></h2>
+<section id="orthanc-json">
+<h3><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code><a class="headerlink" href="#orthanc-json" title="Permalink to this heading">¶</a></h3>
+<p>Basic Orthanc configuration, such as DICOM AET, port, etc. This is the main orthanc configuration file. Things here:</p>
+<ul class="simple">
+<li><p>DICOM AET</p></li>
+<li><p>Name of server</p></li>
+<li><p>compression</p></li>
+<li><p>Find result limits</p></li>
+<li><p>DicomEcho on/off</p></li>
+<li><p>Store on/off</p></li>
+<li><p>Remote Access on/off</p></li>
+<li><p>Authentication on/off</p></li>
+<li><p>Tcp Delay</p></li>
+<li><p>KeepAlive</p></li>
+<li><p>…</p></li>
+</ul>
+</section>
+<section id="users-json">
+<h3><code class="docutils literal notranslate"><span class="pre">users.json</span></code><a class="headerlink" href="#users-json" title="Permalink to this heading">¶</a></h3>
+<p>usernames and passwords for the WADO, Dicomweb and configuration interfaces. This is where all users are stored for DICOMweb and WADO, and access to GUI.</p>
+<ul class="simple">
+<li><p>usernames</p></li>
+<li><p>passwords in clear text.</p></li>
+</ul>
+</section>
+<section id="modalities-json">
+<h3><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code><a class="headerlink" href="#modalities-json" title="Permalink to this heading">¶</a></h3>
+<p>This is where the DICOM “clients” need to reside for the traditional DIMSE protocol</p>
+<p>For DIMSE Query/Retrieve each client needs to be given access with its IP address. Currently, the only supported way to do so is to edit the orthanc JSON config file and reload the docker image. Future versions will have to support Orthanc’s live configuration ability via API.</p>
+</section>
+<section id="postgresql-json">
+<h3><code class="docutils literal notranslate"><span class="pre">postgresql.json</span></code><a class="headerlink" href="#postgresql-json" title="Permalink to this heading">¶</a></h3>
+<p>Credentials and other database related configuration.</p>
+<ul class="simple">
+<li><p>DB Host, database, username and password</p></li>
+<li><p>Indexing on/off</p></li>
+<li><p>Connection Count Limitation</p></li>
+<li><p>…</p></li>
+</ul>
+</section>
+<section id="id1">
+<h3><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code><a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
+<p>DICOM modalities allowed to recieve from and which show up in the explorer as available for sending.</p>
+<ul class="simple">
+<li><p>List of</p>
+<ul>
+<li><p>AET</p></li>
+<li><p>IP</p></li>
+<li><p>PORT</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="explorer2-json">
+<h3><code class="docutils literal notranslate"><span class="pre">explorer2.json</span></code><a class="headerlink" href="#explorer2-json" title="Permalink to this heading">¶</a></h3>
+<p>The new Orthanc explorer interface. Contains many options. Main things here:</p>
+<ul class="simple">
+<li><p>The URL path of the UI.</p></li>
+<li><p>Which DICOM tags to enable</p></li>
+<li><p>Which DICOM Modalities to show</p></li>
+<li><p>What Viewer Icons to show for which viewer</p></li>
+<li><p>The ordering of the viewers</p></li>
+<li><p>Enabling Settings</p></li>
+<li><p>Deleting resources on/off</p></li>
+</ul>
+</section>
+<section id="dicomweb-json">
+<h3><code class="docutils literal notranslate"><span class="pre">dicomweb.json</span></code><a class="headerlink" href="#dicomweb-json" title="Permalink to this heading">¶</a></h3>
+</section>
+<section id="housekeeper-json">
+<h3><code class="docutils literal notranslate"><span class="pre">housekeeper.json</span></code><a class="headerlink" href="#housekeeper-json" title="Permalink to this heading">¶</a></h3>
+<p>Clean up, housekeeping tasks.</p>
+<ul class="simple">
+<li><p>Enable on/off</p></li>
+<li><p>Triggers to configure to start them</p></li>
+<li><p>Forcing a start</p></li>
+<li><p>What to do</p></li>
+</ul>
+</section>
+<section id="extramaindicomtags-json">
+<span id="extra-main-dicom-tags"></span><h3><code class="docutils literal notranslate"><span class="pre">ExtraMainDicomTags.json</span></code><a class="headerlink" href="#extramaindicomtags-json" title="Permalink to this heading">¶</a></h3>
+<p>Orthanc allows the configuration of extra DICOM tags to be indexed in its database. These tags are specified using the <cite>ExtraMainDicomTags</cite> configuration option. By default, Orthanc indexes a limited set of DICOM tags. However, you can extend this set by adding more tags to the <cite>ExtraMainDicomTags</cite> list.</p>
+<p>Here is how you can configure <cite>ExtraMainDicomTags</cite> in Orthanc’s configuration file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span>{
+    &quot;ExtraMainDicomTags&quot; : [
+        &quot;0010,0020&quot;,  # Patient ID
+        &quot;0008,1030&quot;,  # Study Description
+        &quot;0010,0010&quot;   # Patient Name
+    ]
+}
 </pre></div>
 </div>
+<p>Description of <cite>ExtraMainDicomTags</cite> configuration:</p>
+<ul class="simple">
+<li><p><strong>0010,0020 (Patient ID)</strong>: This tag represents the unique identifier assigned to the patient.</p></li>
+<li><p><strong>0008,1030 (Study Description)</strong>: This tag provides a description of the study.</p></li>
+<li><p><strong>0010,0010 (Patient Name)</strong>: This tag represents the name of the patient.</p></li>
+</ul>
+<p>Adding these tags to <cite>ExtraMainDicomTags</cite> will make them available for querying through Orthanc’s REST API, making it easier to filter and search DICOM objects based on these additional attributes.
+acomTags`, update the configuration file (<cite>orthanc.json</cite>) accordingly and restart the Orthanc service to apply the changes.</p>
+<p>For more information on configuring Orthanc, please refer to the official Orthanc documentation.</p>
+</section>
+</section>
+<section id="docker-configuration">
+<h2>Docker Configuration<a class="headerlink" href="#docker-configuration" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">docker-compose.yml</span></code></p>
+<ul class="simple">
+<li><p>IP addresses to expose and map</p></li>
+<li><p>Location of files</p></li>
+<li><p>Location of DB</p></li>
+<li><p>Database Version</p></li>
+<li><p>Date format for Stone Web Viewer</p></li>
+<li><p>Enabling/disbling of Orthanc plugins</p></li>
+<li><p>Location of backups</p></li>
+</ul>
+<p>You can restart just the Orthanc container using:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ovena reload
+</pre></div>
+</div>
+</section>
+<section id="changing-the-ip-address-of-the-server-itself">
+<h2>Changing the IP address of the server itself<a class="headerlink" href="#changing-the-ip-address-of-the-server-itself" title="Permalink to this heading">¶</a></h2>
+<p>This is a Debian distribution, and you can follow Debian procedures to change IP address and hostname.</p>
 </section>
 </section>
 
@@ -66,8 +200,22 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
   <div>
     <h3><a href="index.html">Table of Contents</a></h3>
     <ul>
-<li><a class="reference internal" href="#">Modifiche</a><ul>
-<li><a class="reference internal" href="#configurazione-dei-client">Configurazione dei client</a></li>
+<li><a class="reference internal" href="#">Configuration changes</a><ul>
+<li><a class="reference internal" href="#ovena-env"><code class="docutils literal notranslate"><span class="pre">ovena.env</span></code></a></li>
+<li><a class="reference internal" href="#json-files"><code class="docutils literal notranslate"><span class="pre">*.json</span></code> files</a><ul>
+<li><a class="reference internal" href="#orthanc-json"><code class="docutils literal notranslate"><span class="pre">orthanc.json</span></code></a></li>
+<li><a class="reference internal" href="#users-json"><code class="docutils literal notranslate"><span class="pre">users.json</span></code></a></li>
+<li><a class="reference internal" href="#modalities-json"><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></a></li>
+<li><a class="reference internal" href="#postgresql-json"><code class="docutils literal notranslate"><span class="pre">postgresql.json</span></code></a></li>
+<li><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">modalities.json</span></code></a></li>
+<li><a class="reference internal" href="#explorer2-json"><code class="docutils literal notranslate"><span class="pre">explorer2.json</span></code></a></li>
+<li><a class="reference internal" href="#dicomweb-json"><code class="docutils literal notranslate"><span class="pre">dicomweb.json</span></code></a></li>
+<li><a class="reference internal" href="#housekeeper-json"><code class="docutils literal notranslate"><span class="pre">housekeeper.json</span></code></a></li>
+<li><a class="reference internal" href="#extramaindicomtags-json"><code class="docutils literal notranslate"><span class="pre">ExtraMainDicomTags.json</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#docker-configuration">Docker Configuration</a></li>
+<li><a class="reference internal" href="#changing-the-ip-address-of-the-server-itself">Changing the IP address of the server itself</a></li>
 </ul>
 </li>
 </ul>
@@ -76,7 +224,12 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
   <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="installation.html"
-                          title="previous chapter">Prima installazione</a></p>
+                          title="previous chapter">First Installation</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="upgrade.html"
+                          title="next chapter">How to Upgrade</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
@@ -106,10 +259,13 @@ indirizzo IP e AE Title che coincida qui nelle configurazioni.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="installation.html" title="Prima installazione"
+          <a href="upgrade.html" title="How to Upgrade"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="First Installation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">Modifiche</a></li> 
+        <li class="nav-item nav-item-this"><a href="">Configuration changes</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

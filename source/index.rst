@@ -3,13 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Orthanc PACS Configuration for the Orthodontic Practice v0.2.0
-==============================================================
+Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0
+=====================================================================
 
 .. warning::
 
-   Documentation is still under development. Text here was developed for
-   developed for an older version, and needs to be completely re-written.
+   Documentation is still under development. 
 
 .. toctree::
    :maxdepth: 2
@@ -17,6 +16,7 @@ Orthanc PACS Configuration for the Orthodontic Practice v0.2.0
 
    installation
    configuration
+   upgrade
    backup_restore
 
 Indeces and Tables

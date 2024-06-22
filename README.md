@@ -1,4 +1,4 @@
-# OVNA Open-ortho Vendor Neutral Archive
+# Ovena Open-ortho Vendor Neutral Archive
 
 A DICOM Imaging Server based on Orthanc tailored for smaller private practices, like the orthodontic practices.
 

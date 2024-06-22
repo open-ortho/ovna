@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>First Installation &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
+    <title>How to Upgrade &#8212; Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css" />
     
@@ -18,8 +18,8 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Configuration changes" href="configuration.html" />
-    <link rel="prev" title="Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0" href="index.html" /> 
+    <link rel="next" title="Backup and Restore" href="backup_restore.html" />
+    <link rel="prev" title="Configuration changes" href="configuration.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -28,13 +28,13 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="configuration.html" title="Configuration changes"
+          <a href="backup_restore.html" title="Backup and Restore"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0"
+          <a href="configuration.html" title="Configuration changes"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">First Installation</a></li> 
+        <li class="nav-item nav-item-this"><a href="">How to Upgrade</a></li> 
       </ul>
     </div>  
 
@@ -43,20 +43,14 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="first-installation">
-<h1>First Installation<a class="headerlink" href="#first-installation" title="Permalink to this heading">¶</a></h1>
+  <section id="how-to-upgrade">
+<h1>How to Upgrade<a class="headerlink" href="#how-to-upgrade" title="Permalink to this heading">¶</a></h1>
 <ol class="arabic simple">
-<li><p>Create a minimal debian Installation</p></li>
-<li><p>Download latest release from <a class="reference external" href="https://api.github.com/repos/open-ortho/ovena/tarball">https://api.github.com/repos/open-ortho/ovena/tarball</a></p></li>
-<li><p>Unpack</p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">./ovena-install.sh</span></code></p></li>
+<li><p>Backup ovena</p></li>
+<li><p>Run backup script</p></li>
 </ol>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>curl --output ovena.tgz -L <span class="s2">&quot;https://api.github.com/repos/open-ortho/ovena/tarball&quot;</span>
-
-<span class="c1"># Unpack and run install script</span>
-tar zxvf ./ovena.tgz
-<span class="nb">cd</span> ovena
-./ovena-install.sh
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ovena --file<span class="o">=</span>pre_update_backup.tgz backup
+ovena upgrade
 </pre></div>
 </div>
 </section>
@@ -70,18 +64,18 @@ tar zxvf ./ovena.tgz
         <div class="sphinxsidebarwrapper">
   <div>
     <h4>Previous topic</h4>
-    <p class="topless"><a href="index.html"
-                          title="previous chapter">Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0</a></p>
+    <p class="topless"><a href="configuration.html"
+                          title="previous chapter">Configuration changes</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="configuration.html"
-                          title="next chapter">Configuration changes</a></p>
+    <p class="topless"><a href="backup_restore.html"
+                          title="next chapter">Backup and Restore</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/installation.rst.txt"
+      <li><a href="_sources/upgrade.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -106,13 +100,13 @@ tar zxvf ./ovena.tgz
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="configuration.html" title="Configuration changes"
+          <a href="backup_restore.html" title="Backup and Restore"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0"
+          <a href="configuration.html" title="Configuration changes"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Orthanc PACS Configuration for the Orthodontic Practice 1.0 documentation</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">First Installation</a></li> 
+        <li class="nav-item nav-item-this"><a href="">How to Upgrade</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

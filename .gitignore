@@ -1,4 +1,7 @@
 Pipfile.lock
 _build/
 build/
+dist/
 .vscode/
+.env*
+dist/*
