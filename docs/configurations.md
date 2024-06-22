@@ -2,12 +2,11 @@
 
 Configuration is stored in `/usr/local/etc/ovena`.
 
-
 ## Orthanc configurations
 
 Orthanc config files are in `/usr/local/etc/ovena/orthanc`.
 
-### `orthanc.json` 
+### `orthanc.json`
 
 This is the main orthanc configuration file. Things here:
 
@@ -39,17 +38,17 @@ Credentials and other database related configuration.
 - Connection Count Limitation
 - ...
 
-### `modalities.json` 
+### `modalities.json`
 
 DICOM modalities allowed to recieve from and which show up in the explorer as available for sending.
 
 - List of
+
   - AET
   - IP
   - PORT
 
-
-### `explorer2.json` 
+### `explorer2.json`
 
 The new Orthanc explorer interface. Contains many options. Main things here:
 
@@ -61,4 +60,16 @@ The new Orthanc explorer interface. Contains many options. Main things here:
 - Enabling Settings
 - Deleting resources on/off
 
-### `dicomweb.json` 
+### `dicomweb.json`
+
+## Docker Configuration
+
+### `docker-compose.yml`
+
+- IP addresses to expose and map
+- Location of files
+- Location of DB
+- Database Version
+- Date format for Stone Web Viewer
+- Enabling/disbling of Orthanc plugins
+- Location of backups
