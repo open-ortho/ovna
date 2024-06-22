@@ -16,34 +16,7 @@ else
     printf "No ovena.env file found. Let's make one.\n"
     printf "Enter IP address for Orthanc: "
     read -r ORTHANC_IP
-    printf "Enter server name or IP for samba share: "
-    read -r SMB_SERVER
-    printf "Enter name samba share for DICOM images: "
-    read -r SMB_SHARE
-    printf "Enter name samba share for database backups: "
-    read -r SMB_SHARE_DB_BACKUP
-    printf "Enter username for samba share: "
-    read -r SMB_USER
-    printf "Enter password for samba share: "
-    read -r SMB_PASS
-    printf "Enter domain for samba share: "
-    read -r SMB_DOMAIN
-    printf "
-ORTHANC_IP=%s:
-SMB_USER=%s
-SMB_PASS=%s
-SMB_DOMAIN=%s
-SMB_SERVER=%s
-SMB_SHARE=%s
-SMB_SHARE_DB_BACKUP=%s
-" \
-    "$ORTHANC_IP" \
-    "$SMB_USER" \
-    "$SMB_PASS" \
-    "$SMB_DOMAIN" \
-    "$SMB_SERVER" \
-    "$SMB_SHARE" \
-    "$SMB_SHARE_DB_BACKUP" > "${ENV}"
+    printf "ORTHANC_IP=%s:" "$ORTHANC_IP" > "${ENV}"
     chmod 600 "${ENV}"
 fi
 

@@ -47,12 +47,6 @@ substitution:
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_USERNAME>#${DATABASE_USERNAME}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<OVENA_CONFIG>#${OVENA_CONFIG}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_USER>#${SMB_USER}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_PASS>#${SMB_PASS}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_DOMAIN>#${SMB_DOMAIN}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_SERVER>#${SMB_SERVER}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_SHARE>#${SMB_SHARE}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<SMB_SHARE_DB_BACKUP>#${SMB_SHARE_DB_BACKUP}#g" {} \;
 	find $(DIST) -type f -exec sed -i'' -e "s#\$$<PROJECT_NAME>#${PROJECT_NAME}#g" {} \;
 
 tarball: $(TARBALL)

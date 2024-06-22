@@ -7,11 +7,3 @@ ORTHANC_IP = 127.0.0.1:
 
 # Location for Ovena configuration
 OVENA_CONFIG = /usr/local/etc/ovena
-
-# Credentials to mount remote SMB share for remote image storage
-SMB_USER = ovena
-SMB_PASS = ovena-password
-SMB_DOMAIN = WORKGROUP
-SMB_SERVER = nas
-SMB_SHARE = ovena
-SMB_SHARE_DB_BACKUP = ovena_db_backup

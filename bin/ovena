@@ -22,10 +22,6 @@ set -a
 # shellcheck source=../dot-env
 . "${ENV}" || exit 1
 
-# Convert SMB server name to IP: for some reason hostname makes docker or docker-compose choke
-SMB_SERVER_IP=$(getent hosts "${SMB_SERVER}" | awk '{ print $1 }')
-export SMB_SERVER="${SMB_SERVER_IP}"
-
 # Reset all variables that might be set
 file=
 verbose=0 # Variables to be evaluated as shell arithmetic should be initialized to a default or validated beforehand.

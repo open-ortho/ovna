@@ -27,7 +27,7 @@ services:
       "${ORTHANC_IP}104:4242"
       ]
     volumes: [
-      orthanc-storage:/var/lib/orthanc/db:Z,
+      /var/lib/docker/volumes/orthanc/db:/var/lib/orthanc/db:Z,
       "$<OVENA_CONFIG>/orthanc/:/etc/orthanc/:ro"
       ]
     environment: 
@@ -50,19 +50,3 @@ services:
     environment:
       POSTGRES_USER: "$<DATABASE_USERNAME>"
       POSTGRES_PASSWORD: "postgres"
-
-volumes:
-  orthanc-storage:
-    driver: local
-    driver_opts:
-      type: cifs
-      device: //${SMB_SERVER}/${SMB_SHARE}
-      o: "username=${SMB_USER},password=${SMB_PASS}"
-  $<DATABASE_DOCKER_IMAGE>-backup:
-    driver: local
-    driver_opts:
-      type: cifs
-      device: //${SMB_SERVER}/${SMB_SHARE_DB_BACKUP}
-      o: "username=${SMB_USER},password=${SMB_PASS}"
-      # Unfortunately the credentials option doesn't work.
-      # o: "credentials=$<OVENA_CONFIG>/smbcredentials"
