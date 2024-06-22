@@ -32,7 +32,7 @@ services:
       "${ORTHANC_IP}104:4242"
       ]
     volumes: [
-      /var/lib/docker/volumes/orthanc/db:/var/lib/orthanc/db:Z,
+      /var/lib/docker/volumes/ovena/orthanc/data:/var/lib/orthanc/db:Z,
       "$<OVENA_CONFIG>/orthanc/:/etc/orthanc/:ro"
       ]
     environment: 
@@ -49,8 +49,8 @@ services:
     container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
     volumes: [
-      /var/lib/docker/volumes/postgresql:/var/lib/postgresql/data,
-      "$<DATABASE_DOCKER_IMAGE>-backup:/mnt/backup"
+      "/var/lib/docker/volumes/ovena/$<DATABASE_DOCKER_IMAGE>:/var/lib/postgresql/data",
+      "/var/lib/docker/volumes/ovena/$<DATABASE_DOCKER_IMAGE>-backup:/mnt/backup"
       ]
     environment:
       POSTGRES_USER: "$<DATABASE_USERNAME>"
