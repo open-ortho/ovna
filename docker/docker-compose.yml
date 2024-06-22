@@ -6,7 +6,6 @@
 #  at the next update.
 # ==============================================================================
 #
-version: "2"
 services:
   nginx-reverse-proxy:
     image: lscr.io/linuxserver/nginx

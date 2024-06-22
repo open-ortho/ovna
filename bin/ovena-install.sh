@@ -39,7 +39,7 @@ export DEBIAN_FRONTEND=noninteractive && apt update && apt-get -y upgrade && apt
 apt autoremove
 
 echo "Install newer docker-compose. The debian default one was giving problems."
-curl -SL https://github.com/docker/compose/releases/download/v2.19.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.28.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
 chmod 755 /usr/local/bin/docker-compose
 
 echo "Copy configuration files"
