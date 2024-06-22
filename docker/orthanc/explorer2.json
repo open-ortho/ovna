@@ -7,8 +7,8 @@
       "EnableStudyList": true,
       "EnableModification": true,
       "Modifications": {
-        "DefaultMode": "modify-keep-uids",
-        "AllowedModes": ["modify-keep-uids"]
+        "AllowedModes": ["modify-new-uids"],
+        "DefaultMode": "modify-new-uids"
       },
       "PatientMainTags" : [
         "PatientID",
@@ -32,7 +32,7 @@
       "StudyListContentIfNoSearch": "most-recents",
       "EnableDicomModalities": true,
       "EnableDownloadZip": true,
-      "EnableAnonymization": true,
+      "EnableAnonymization": false,
       "EnableSendTo": true,
 
       "ModalitiesFilter": [

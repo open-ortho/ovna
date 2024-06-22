@@ -1,13 +1,15 @@
 #!/bin/sh
 #
-# Ovena helper tool v. 0.3.0
+# Ovena helper tool v. 0.3.1
 #
 
-VERSION="0.3.0"
+VERSION="0.3.1"
 DBNAME="$<DATABASE_NAME>"
 DBUSER="$<DATABASE_USERNAME>"
-ENV="$<OVENA_CONFIG>/ovena.env"
-alias _docker-compose="docker-compose -f $<OVENA_CONFIG>/docker-compose.yml"
+OVENA_CONFIG="$<OVENA_CONFIG>"
+OVENA_IMPORT="/usr/local/bin/ovena-ImportDicomFiles.py"
+ENV="${OVENA_CONFIG}/ovena.env"
+alias _docker-compose="docker-compose -f ${OVENA_CONFIG}/docker-compose.yml"
 alias _exec="_docker-compose exec"
 alias _exec_db="_docker-compose exec -T \"$<DATABASE_DOCKER_IMAGE>\""
 
@@ -27,6 +29,10 @@ export SMB_SERVER="${SMB_SERVER_IP}"
 # Reset all variables that might be set
 file=
 verbose=0 # Variables to be evaluated as shell arithmetic should be initialized to a default or validated beforehand.
+
+log() {
+    printf "INFO: %s" "$@"
+}
 
 show_help() {
     printf "
@@ -49,17 +55,20 @@ Commands:
 
     shell:      Launch a bash shell inside the Orthanc container.
 
-    logs:       Continuosly print Orthanc service logs.
+    logs:       Continuosly print service logs from all containers.
+
+    import:     Import DICOM files insided the folder specified in --file 
+                into Orthanc.
 
     backup:     Backup PostgreSQL database to <filename> in CIFS  
-                share defined in $<OVENA_CONFIG>/docker-compose.yml.
+                share defined in %s/docker-compose.yml.
 
     restore:    Restore PostgreSQL database from <filename> in CIFS share
-                defined in $<OVENA_CONFIG>/docker-compose.yml.
+                defined in %s/docker-compose.yml.
 
     upgrade:    Upgrade ovena. Checks if there are new versions and upgrades.
 
-" "${VERSION}"
+" "${VERSION}" "${OVENA_CONFIG}" "${OVENA_CONFIG}"
 }
 
 _log() {
@@ -130,6 +139,7 @@ _restore() {
         if [ ! -r "${file}" ]; then printf "ERROR: No backup file [%s] was found.\n" "${file}" && exit 1; fi
         _log "Copying backup inside container"
         docker cp "${BKPFILE}" "ovena-postgres:${BKPFILE_IN_CONTAINER}" || exit 1
+        ;;
     esac
     # DBUSER and DBNAME are created by default by the docker container
     case ${BKPFILE} in
@@ -196,6 +206,21 @@ _backup() {
     _log "done."
 }
 
+_import() {
+    if [ -z "${file}" ]; then
+        log "ERROR: You must specify an input folder using the --file paramenter"
+        exit 1
+    fi
+    LOGDIR="/var/log/ovena-import"
+    mkdir -p "${LOGDIR}"
+    ORTHANC_IP=$(printf "%s" $ORTHANC_IP | sed 's/://')
+    ORTHANC_PORT="443"
+
+    # Launch a separate import process for every first level folder.
+    ${OVENA_IMPORT} "${ORTHANC_IP}" "${ORTHANC_PORT}" "${file}" "${OVENA_CONFIG}/orthanc/users.json" "" >>"${LOGDIR}/${DIR}_import.log" &
+
+}
+
 command="${1}"
 case ${command} in
 start)
@@ -211,7 +236,7 @@ reload)
     exit
     ;;
 logs)
-    _docker-compose logs -f orthanc
+    _docker-compose logs -f 
     exit
     ;;
 shell)
@@ -228,6 +253,10 @@ restore)
     ;;
 upgrade)
     _upgrade
+    exit
+    ;;
+import)
+    _import
     exit
     ;;
 *)
