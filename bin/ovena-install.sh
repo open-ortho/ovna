@@ -59,6 +59,7 @@ chmod 600 "${OVENA_CONFIG}/orthanc/users.json" "${OVENA_CONFIG}/docker-compose.y
 echo "Copy scripts in /usr/local/bin"
 rm -f /usr/local/bin/ovena*
 cp -vR bin/ovena* /usr/local/bin || exit 1
+find /usr/local/bin -name 'ovena*' -type f -exec chmod 755 {} + || { echo "Failed to chmod some files or no files found matching '/usr/local/bin/ovena*'"; exit 1; }
 echo "Install backup script in cron.hourly"
 mv /usr/local/bin/ovena-backup-wrapper /etc/cron.hourly/ || exit 1
 

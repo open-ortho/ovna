@@ -20,15 +20,17 @@ $(shell if [ ! -e .env ]; then cp dot-env .env; fi)
 include .env
 export $(shell sed 's/=.*//' .env)
 
-TARBALL = $(dir $(DIST))/$(PROJECT_NAME)-$(VERSION).tgz
+TARBALL = $(dir $(DIST))$(PROJECT_NAME)-$(VERSION).tgz
 INSTALLER = bin/ovena-install.sh
 
-.PHONY: clean all substitution deploy github-release tarball
+.PHONY: clean all substitution deploy github-release tarball default
+
+default: clean tarball
 
 clean:
 	rm -rf $(dir $(DIST))
 
-all: $(DIST)/bin $(DIST)/docker substitution
+all: $(DIST)/bin $(DIST)/docker substitution fix-file-modes
 
 $(DIST):
 	mkdir -p $(DIST)
@@ -41,13 +43,16 @@ $(DIST)/docker: $(DIST)
 	cp -Rv docker $@
 
 substitution:
-# Substitute all $<> variables
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_NAME>#${DATABASE_NAME}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<DATABASE_USERNAME>#${DATABASE_USERNAME}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<OVENA_CONFIG>#${OVENA_CONFIG}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" {} \;
-	find $(DIST) -type f -exec sed -i'' -e "s#\$$<PROJECT_NAME>#${PROJECT_NAME}#g" {} \;
+# Substitute all $<> variables. Purposely avoiding the -i command, to ensure compatibility between macOS and Linux.
+	find $(DIST) -type f -exec sh -c 'sed -e "s#\$$<DATABASE_DOCKER_IMAGE>#${DATABASE_DOCKER_IMAGE}#g" "$$1" > "$$1.tmp" && mv "$$1.tmp" "$$1"' sh {} \;
+	find $(DIST) -type f -exec sh -c 'sed -e "s#\$$<DATABASE_NAME>#${DATABASE_NAME}#g" "$$1" > "$$1.tmp" && mv "$$1.tmp" "$$1"' sh {} \;
+	find $(DIST) -type f -exec sh -c 'sed -e "s#\$$<DATABASE_USERNAME>#${DATABASE_USERNAME}#g" "$$1" > "$$1.tmp" && mv "$$1.tmp" "$$1"' sh {} \;
+	find $(DIST) -type f -exec sh -c 'sed -e "s#\$$<OVENA_CONFIG>#${OVENA_CONFIG}#g" "$$1" > "$$1.tmp" && mv "$$1.tmp" "$$1"' sh {} \;
+	find $(DIST) -type f -exec sh -c 'sed -e "s#\$$<ORTHANC_IP>#${ORTHANC_IP}#g" "$$1" > "$$1.tmp" && mv "$$1.tmp" "$$1"' sh {} \;
+	find $(DIST) -type f -exec sh -c 'sed -e "s#\$$<PROJECT_NAME>#${PROJECT_NAME}#g" "$$1" > "$$1.tmp" && mv "$$1.tmp" "$$1"' sh {} \;
+
+fix-file-modes:
+	chmod 755 $(DIST)/$(notdir $(INSTALLER))
 
 tarball: $(TARBALL)
 
