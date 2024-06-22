@@ -30,7 +30,7 @@ echo "Update and install packages"
 mkdir -p /tmp
 chown 0:0 /tmp
 chmod 1777 /tmp
-export DEBIAN_FRONTEND=noninteractive && apt update && apt-get -y upgrade && apt-get -y install docker.io docker-compose cifs-utils curl ntp || exit 1
+export DEBIAN_FRONTEND=noninteractive && apt update && apt-get -y upgrade && apt-get -y install docker.io docker-compose cifs-utils curl ntp tmux sudo || exit 1
 apt autoremove
 
 echo "Install newer docker-compose. The debian default one was giving problems."
