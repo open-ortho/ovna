@@ -16,6 +16,7 @@ Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0
 
    installation
    configuration
+   paths
    upgrade
    backup_restore
 
