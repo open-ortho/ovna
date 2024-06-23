@@ -3,18 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Ovena: Orthanc PACS Configuration for the Orthodontic Practice v0.3.0
-=====================================================================
+Ovena: Distribuzione di Orthanc per un PACS per lo studio Ortodontico v0.3.0
+==============================================================================
 
 .. warning::
 
-   Documentation is still under development. 
+   Documentazione ancora in sviluppo
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   installation
+   installation-it
    configuration
    paths
    upgrade
