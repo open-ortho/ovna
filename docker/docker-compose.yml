@@ -23,7 +23,7 @@ services:
       "${ORTHANC_IP}443:443",
     ]
   orthanc:
-    image: osimis/orthanc:23.6.0
+    image: orthancteam/orthanc:24.7.3
     container_name: $<PROJECT_NAME>-orthanc
     depends_on: [$<DATABASE_DOCKER_IMAGE>]
     restart: unless-stopped
