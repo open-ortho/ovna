@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Ovena: Distribuzione di Orthanc per un PACS per lo studio Ortodontico v0.3.0
+Ovena: Distribuzione di Orthanc per un PACS per lo studio Ortodontico v0.4.2
 ==============================================================================
 
 .. warning::
