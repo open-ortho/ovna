@@ -47,6 +47,7 @@ services:
     image: postgres:15
     container_name: $<PROJECT_NAME>-postgres
     restart: unless-stopped
+    # The Postgres docker image always creates a new persistent volume, so misterious volumes will appear, if you don't map the /var/lib/postgresql/data folder. See https://jira.ortocomputer.com/browse/ROSA-425
     volumes: [
       "/var/lib/docker/volumes/ovena/$<DATABASE_DOCKER_IMAGE>:/var/lib/postgresql/data",
       "/var/lib/docker/volumes/ovena/$<DATABASE_DOCKER_IMAGE>-backup:/mnt/backup"
